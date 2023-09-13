@@ -27,7 +27,7 @@ const FormProfil = ({
             htmlFor="website-admin"
             className="hidden mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            Nom :
+            Prenom :
           </label>
           <div className="flex sm:w-1/2">
             <span className="inline-flex items-center px-3 text-lg  bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:border-gray-600">
@@ -46,7 +46,7 @@ const FormProfil = ({
             htmlFor="website-admin"
             className="hidden mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            Prenom :
+            Nom :
           </label>
           <div className="flex sm:w-1/2">
             <span className="inline-flex items-center px-3 text-lg  bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:border-gray-600">
@@ -86,9 +86,8 @@ const FormProfil = ({
           </div>
 
           <label
-            type="phone"
             id="tel"
-            htmlFor="phone"
+            htmlFor="tel"
             className="hidden mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Your Tel
@@ -98,7 +97,7 @@ const FormProfil = ({
               <BsFillTelephoneFill />
             </div>
             <input
-              type="tel"
+              type="text"
               id="tel"
               className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Tel"

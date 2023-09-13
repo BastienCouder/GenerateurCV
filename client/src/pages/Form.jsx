@@ -1,5 +1,4 @@
 import { useState } from "react";
-import PropTypes from "prop-types";
 import FormProfil from "../components/Profil";
 import Competences from "../components/Competences";
 import Experiences from "../components/Experiences";
@@ -67,38 +66,44 @@ const Form = () => {
     setReseauxSociaux(updatedReseauxSociaux);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("name", nom);
-    formData.append("surname", prenom);
-    formData.append("email", email);
-    formData.append("tel", tel);
-    formData.append("picture", avatar);
-    formData.append(
+    const data = new FormData();
+
+    data.append("name", nom);
+    data.append("surname", prenom);
+    data.append("email", email);
+    data.append("tel", tel);
+
+    if (avatar) {
+      data.append("picture", avatar);
+    }
+
+    data.append(
       "github",
       reseauxSociaux.find((item) => item.network === "Github")?.value || ""
     );
-    formData.append(
+    data.append(
       "linkedin",
       reseauxSociaux.find((item) => item.network === "Linkedin")?.value || ""
     );
 
-    // Ajoutez les compétences, expériences et hobbies au FormData ici
+    // Ajoutez les compétences, expériences et hobbies au Data ici
     competences.forEach((competence) => {
-      formData.append("competences", competence.description);
+      data.append("competences", competence.description);
     });
 
     experiences.forEach((experience) => {
-      formData.append("experiences", experience.description);
+      data.append("experiences", experience.description);
     });
 
     hobbies.forEach((hobbie) => {
-      formData.append("hobbies", hobbie);
+      data.append("hobbies", hobbie);
     });
 
-    await dispatch(createPDF(formData));
+    dispatch(createPDF(data));
+    console.log(data);
   };
 
   return (
@@ -166,18 +171,6 @@ const Form = () => {
       </form>
     </div>
   );
-};
-
-Form.propTypes = {
-  nom: PropTypes.string.isRequired,
-  prenom: PropTypes.string.isRequired,
-  avatar: PropTypes.string.isRequired,
-  email: PropTypes.string.isRequired,
-  reseauxSociaux: PropTypes.array.isRequired,
-  profil: PropTypes.string.isRequired,
-  experiences: PropTypes.array.isRequired,
-  hobbies: PropTypes.array.isRequired,
-  competences: PropTypes.array.isRequired,
 };
 
 const getSocialMediaIcon = (network) => {

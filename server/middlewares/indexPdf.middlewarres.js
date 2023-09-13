@@ -14,31 +14,43 @@ function createInvoice(pdfData, path) {
   doc.fontSize(18).text("Email : " + pdfData.email, 100, 200);
   doc.fontSize(18).text("Tel : " + pdfData.tel, 100, 250);
 
-  // // Affichage des expériences
-  // doc.fontSize(18).text("Expériences :", 100, 400);
-  // pdfData.experiences.forEach((experience, index) => {
-  //   doc
-  //     .fontSize(14)
-  //     .text(
-  //       `${index + 1}. ${experience.date}: ${experience.description}`,
-  //       120,
-  //       430 + index * 20
-  //     );
-  // });
+  // Affichage des expériences
+  doc.fontSize(18).text("Expériences :", 100, 400);
+  if (Array.isArray(pdfData.experiences)) {
+    pdfData.experiences.forEach((experience, index) => {
+      doc
+        .fontSize(14)
+        .text(
+          `${index + 1}. ${experience.date}: ${experience.description}`,
+          120,
+          430 + index * 20
+        );
+    });
+  } else {
+    doc.fontSize(14).text("Aucune expérience disponible.", 120, 430);
+  }
 
-  // // Affichage des compétences
-  // doc.fontSize(18).text("Compétences :", 100, 300);
-  // pdfData.competences.forEach((competence, index) => {
-  //   doc
-  //     .fontSize(14)
-  //     .text(`${index + 1}. ${competence.description}`, 120, 330 + index * 20);
-  // });
+  // Affichage des compétences
+  doc.fontSize(18).text("Compétences :", 100, 300);
+  if (Array.isArray(pdfData.competences)) {
+    pdfData.competences.forEach((competence, index) => {
+      doc
+        .fontSize(14)
+        .text(`${index + 1}. ${competence.description}`, 120, 330 + index * 20);
+    });
+  } else {
+    doc.fontSize(14).text("Aucune compétence disponible.", 120, 330);
+  }
 
-  // // Affichage des hobbies
-  // doc.fontSize(18).text("Hobbies :", 100, 600);
-  // pdfData.hobbies.forEach((hobbie, index) => {
-  //   doc.fontSize(14).text(`${index + 1}. ${hobbie}`, 120, 630 + index * 20);
-  // });
+  // Affichage des hobbies
+  doc.fontSize(18).text("Hobbies :", 100, 600);
+  if (Array.isArray(pdfData.hobbies)) {
+    pdfData.hobbies.forEach((hobbie, index) => {
+      doc.fontSize(14).text(`${index + 1}. ${hobbie}`, 120, 630 + index * 20);
+    });
+  } else {
+    doc.fontSize(14).text("Aucun hobby disponible.", 120, 630);
+  }
 
   generateHeader(doc);
   generateFooter(doc);

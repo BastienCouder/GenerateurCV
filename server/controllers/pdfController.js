@@ -18,23 +18,30 @@ module.exports.readPdf = async (req, res) => {
 module.exports.createPdf = async (req, res) => {
   try {
     const pdfData = req.body;
+    console.log("Données : ", pdfData);
 
     const existingPdfData = await PdfModel.findOne({
       name: pdfData.name,
-    }).exec();
+    });
 
     if (existingPdfData) {
+      console.log("Mise à jour des données existantes :", pdfData.name);
       await PdfModel.findOneAndUpdate({ name: pdfData.name }, pdfData);
     } else {
+      console.log("Création de nouvelles données :", pdfData.name);
       await PdfModel.create(pdfData);
     }
 
     const pdfPath = path.join(
       __dirname,
-      `../uploads/pdf/${pdfData.name}-cv.pdf`
+      `../../client/public/uploads/pdf/${pdfData.name}-cv.pdf`
     );
 
+    console.log("Chemin du fichier PDF :", pdfPath);
+
     await createInvoice(pdfData, pdfPath);
+
+    console.log("PDF généré avec succès :", pdfPath);
 
     res.status(201).json({ message: "Données ajoutées avec succès", pdfData });
   } catch (error) {
