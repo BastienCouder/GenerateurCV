@@ -44,14 +44,13 @@ const Form = () => {
   console.log(formData);
 
   const handleAjouterEducation = () => {
-    const nouvelleEducation = { diplome: "", annee: "" }; // Modifiez cela en fonction de vos champs d'éducation
+    const nouvelleEducation = { diplome: "", annee: "" };
     setFormData({
       ...formData,
       educations: [...formData.educations, nouvelleEducation],
     });
   };
 
-  // Fonction pour supprimer une éducation par index
   const handleSupprimerEducation = (index) => {
     const educationsCopie = [...formData.educations];
     educationsCopie.splice(index, 1);
@@ -139,7 +138,7 @@ const Form = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Vous pouvez traiter les données du formulaire ici
+
     console.log(formData);
   };
 
@@ -169,7 +168,7 @@ const Form = () => {
         </div>
         <Education
           formData={formData}
-          handleChange={handleChange} // Assurez-vous de passer les gestionnaires d'événements nécessaires
+          handleChange={handleChange}
           handleAjouterEducation={handleAjouterEducation}
           handleSupprimerEducation={handleSupprimerEducation}
         />
