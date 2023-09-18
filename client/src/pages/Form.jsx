@@ -2,6 +2,7 @@ import { useState } from "react";
 import PersonalInfo from "../components/Profil";
 import Experience from "../components/Experiences";
 import Competences from "../components/Competences";
+import Languages from "../components/Languages";
 import Hobbies from "../components/Hobbies";
 import SocialMediaInput from "../components/SocialMediaInput";
 import {
@@ -10,6 +11,7 @@ import {
   AiFillTwitterCircle,
 } from "react-icons/ai";
 import { BsGlobe } from "react-icons/bs";
+import Education from "../components/Educations";
 
 const Form = () => {
   const [formData, setFormData] = useState({
@@ -18,11 +20,10 @@ const Form = () => {
     email: "",
     phone: "",
     address: "",
-    education: "",
+    educations: [{ diplome: "", annee: "" }],
     experiences: [{ date: "", lieu: "", description: "" }],
     competences: [{ description: "", link: "" }],
-    languages: "",
-    certifications: "",
+    languages: [{ language: "", level: "" }],
     hobbies: [""],
     socialnetwork: [
       { network: "linkedin", value: "" },
@@ -41,6 +42,24 @@ const Form = () => {
   };
 
   console.log(formData);
+
+  const handleAjouterEducation = () => {
+    const nouvelleEducation = { diplome: "", annee: "" }; // Modifiez cela en fonction de vos champs d'éducation
+    setFormData({
+      ...formData,
+      educations: [...formData.educations, nouvelleEducation],
+    });
+  };
+
+  // Fonction pour supprimer une éducation par index
+  const handleSupprimerEducation = (index) => {
+    const educationsCopie = [...formData.educations];
+    educationsCopie.splice(index, 1);
+    setFormData({
+      ...formData,
+      educations: educationsCopie,
+    });
+  };
 
   const handleAjouterExperience = () => {
     const nouvelleExperience = { date: "", lieu: "", description: "" };
@@ -73,6 +92,22 @@ const Form = () => {
     setFormData({
       ...formData,
       competences: competencesCopie,
+    });
+  };
+
+  const handleAjouterLanguage = () => {
+    const nouvelleLangue = { language: "", level: "" };
+    setFormData({
+      ...formData,
+      languages: [...formData.languages, nouvelleLangue],
+    });
+  };
+  const handleSupprimerLanguage = (index) => {
+    const LanguagesCopie = [...formData.languages];
+    LanguagesCopie.splice(index, 1);
+    setFormData({
+      ...formData,
+      languages: LanguagesCopie,
     });
   };
 
@@ -132,6 +167,12 @@ const Form = () => {
             </div>
           </div>
         </div>
+        <Education
+          formData={formData}
+          handleChange={handleChange} // Assurez-vous de passer les gestionnaires d'événements nécessaires
+          handleAjouterEducation={handleAjouterEducation}
+          handleSupprimerEducation={handleSupprimerEducation}
+        />
         <Experience
           formData={formData}
           handleChange={handleChange}
@@ -143,6 +184,12 @@ const Form = () => {
           handleChange={handleChange}
           handleAjouterCompetence={handleAjouterCompetence}
           handleSupprimerCompetence={handleSupprimerCompetence}
+        />
+        <Languages
+          formData={formData}
+          handleChange={handleChange}
+          handleAjouterLanguage={handleAjouterLanguage}
+          handleSupprimerLanguage={handleSupprimerLanguage}
         />
         <Hobbies
           formData={formData}
