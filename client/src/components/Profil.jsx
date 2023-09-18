@@ -24,7 +24,18 @@ const FormInputField = ({ id, value, type, onChange, placeholder, icon }) => (
 );
 
 const PersonalInfo = ({ formData, handleChange }) => {
-  const { nom, prenom, avatar, email, tel, adress, profil } = formData;
+  const personalInfo = formData.personalInfos[0];
+  const updatePersonalInfoField = (field, value) => {
+    const updatedPersonalInfo = { ...personalInfo };
+    updatedPersonalInfo[field] = value;
+
+    handleChange({
+      target: {
+        name: "personalInfos",
+        value: [updatedPersonalInfo],
+      },
+    });
+  };
 
   return (
     <>
@@ -32,17 +43,17 @@ const PersonalInfo = ({ formData, handleChange }) => {
         <div className="flex w-full justify-between gap-x-4 text-white text-lg">
           <FormInputField
             id="prenom"
-            value={prenom}
+            value={personalInfo.prenom}
             type="text"
-            onChange={(e) => handleChange(e, "prenom")}
+            onChange={(e) => updatePersonalInfoField("prenom", e.target.value)}
             placeholder="Prénom"
             icon={<FaUserCircle />}
           />
           <FormInputField
             id="nom"
-            value={nom}
+            value={personalInfo.nom}
             type="text"
-            onChange={(e) => handleChange(e, "nom")}
+            onChange={(e) => updatePersonalInfoField("nom", e.target.value)}
             placeholder="Nom"
             icon={<FaUserCircle />}
           />
@@ -50,45 +61,45 @@ const PersonalInfo = ({ formData, handleChange }) => {
         <div className="flex gap-x-4 justify-between w-full items-center text-white text-lg">
           <FormInputField
             id="email"
-            value={email}
+            value={personalInfo.email}
             type="text"
-            onChange={(e) => handleChange(e, "email")}
+            onChange={(e) => updatePersonalInfoField("email", e.target.value)}
             placeholder="Email"
             icon={<MdEmail />}
           />
 
           <FormInputField
             id="tel"
-            value={tel}
+            value={personalInfo.tel}
             type="text"
-            onChange={(e) => handleChange(e, "tel")}
+            onChange={(e) => updatePersonalInfoField("tel", e.target.value)}
             placeholder="Tel"
             icon={<BsFillTelephoneFill />}
           />
           <FormInputField
-            id="adress"
-            value={adress}
+            id="address"
+            value={personalInfo.address}
             type="text"
-            onChange={(e) => handleChange(e, "adress")}
+            onChange={(e) => updatePersonalInfoField("address", e.target.value)}
             placeholder="Adresse"
             icon={<AiFillHome />}
           />
         </div>
         <input
           id="avatar"
-          value={avatar}
+          value={personalInfo.avatar}
           type="file"
-          onChange={(e) => handleChange(e, "avatar")}
+          onChange={(e) => updatePersonalInfoField("avatar", e.target.value)}
           placeholder="Choisir une photo de profil"
           className="w-full block text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
         />
         <div className="mb-4">
           <textarea
             id="profil"
-            value={profil}
+            value={personalInfo.profil}
             type="textarea"
             placeholder="Decription ..."
-            onChange={(e) => handleChange(e, "profil")}
+            onChange={(e) => updatePersonalInfoField("profil", e.target.value)}
             className="resize-none block h-36 p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           />
         </div>

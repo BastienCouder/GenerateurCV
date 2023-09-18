@@ -12,14 +12,22 @@ import {
 } from "react-icons/ai";
 import { BsGlobe } from "react-icons/bs";
 import Education from "../components/Educations";
+import { apiUrl } from "../utils/Utils";
+import axios from "axios";
 
 const Form = () => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    address: "",
+    personalInfos: [
+      {
+        prenom: "",
+        nom: "",
+        email: "",
+        tel: "",
+        avatar: "",
+        address: "",
+        profil: "",
+      },
+    ],
     educations: [{ diplome: "", annee: "" }],
     experiences: [{ date: "", lieu: "", description: "" }],
     competences: [{ description: "", link: "" }],
@@ -27,9 +35,9 @@ const Form = () => {
     hobbies: [""],
     socialnetwork: [
       { network: "linkedin", value: "" },
-      { network: "twitter", value: "" },
+      { network: "instagram", value: "" },
       { network: "github", value: "" },
-      { network: "website", value: "" },
+      { network: "web", value: "" },
     ],
   });
 
@@ -40,8 +48,6 @@ const Form = () => {
       [name]: value,
     });
   };
-
-  console.log(formData);
 
   const handleAjouterEducation = () => {
     const nouvelleEducation = { diplome: "", annee: "" };
@@ -136,8 +142,29 @@ const Form = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const response = await axios.post(`${apiUrl}/pdf`, formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 200) {
+        // Utilisez response.status pour vérifier le statut HTTP
+        const responseData = response.data; // Pas besoin d'appeler .json() ici
+        console.log("Réponse du serveur : ", responseData);
+
+        if (responseData.message === "Données ajoutées avec succès") {
+          console.log("PDF généré avec succès.");
+        }
+      } else {
+        console.error("Erreur lors de la génération du PDF.");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la génération du PDF.", error);
+    }
 
     console.log(formData);
   };

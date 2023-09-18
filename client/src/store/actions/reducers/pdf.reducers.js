@@ -1,4 +1,4 @@
-import { CREATE_PDF, GET_PDF_ERRORS, READ_PDF } from "../actions/pdf.actions";
+import { CREATE_PDF, GET_PDF_ERRORS, READ_PDF } from "../pdf.actions";
 
 const initialState = {
   pdf: null,

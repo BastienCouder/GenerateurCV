@@ -3,7 +3,7 @@ import App from "./App.jsx";
 import "./styles/tailwind.css";
 import "./styles/index.css";
 import { Provider } from "react-redux";
-import rootReducer from "./store/reducers";
+import rootReducer from "./store/actions/reducers/index.js";
 import { applyMiddleware, createStore } from "redux";
 import thunk from "redux-thunk";
 
