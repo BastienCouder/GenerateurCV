@@ -4,19 +4,15 @@ const pdfSchema = mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
     },
     surname: {
       type: String,
-      required: true,
     },
     email: {
       type: String,
-      required: true,
     },
     tel: {
       type: String,
-      required: true,
     },
     picture: {
       type: String,
@@ -30,19 +26,16 @@ const pdfSchema = mongoose.Schema(
     competences: [
       {
         type: String,
-        required: true,
       },
     ],
     experiences: [
       {
         type: String,
-        required: true,
       },
     ],
     hobbies: [
       {
         type: String,
-        required: true,
       },
     ],
   },

@@ -1,22 +1,31 @@
 import PropTypes from "prop-types";
-
-//icons
 import { BiLink } from "react-icons/bi";
 import { GiSettingsKnobs } from "react-icons/gi";
 
 const Competences = ({
-  competences,
-  setCompetences,
-  handleAjouterCompetence,
+  formData,
+  handleChange,
   handleSupprimerCompetence,
+  handleAjouterCompetence,
 }) => {
+  const competences = formData.competences;
+
+  const updateCompetenceField = (index, field, value) => {
+    const updatedCompetences = [...competences];
+    updatedCompetences[index][field] = value;
+
+    handleChange({
+      target: {
+        name: "competences",
+        value: updatedCompetences,
+      },
+    });
+  };
+
   return (
     <div className="mb-4">
       <h2 className="text-xl font-bold mb-1">Compétences</h2>
       <div className="border-b-4 border-gray-900 mb-4"></div>
-      <label className="hidden mb-4 text-sm font-medium text-gray-900 dark:text-gray-900">
-        Compétences :
-      </label>
       {competences.map((competence, index) => (
         <div key={index} className="mb-2 ">
           <p className="mb-1">Compétence {index + 1}</p>
@@ -29,12 +38,11 @@ const Competences = ({
               <input
                 type="text"
                 placeholder="Compétence"
+                name={`competences[${index}].description`}
                 value={competence.description}
-                onChange={(e) => {
-                  const updatedCompetences = [...competences];
-                  updatedCompetences[index].description = e.target.value;
-                  setCompetences(updatedCompetences);
-                }}
+                onChange={(e) =>
+                  updateCompetenceField(index, "description", e.target.value)
+                }
                 className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
             </div>
@@ -46,12 +54,11 @@ const Competences = ({
               <input
                 type="text"
                 placeholder="Liens"
+                name={`competences[${index}].link`}
                 value={competence.link}
-                onChange={(e) => {
-                  const updatedCompetences = [...competences];
-                  updatedCompetences[index].link = e.target.value;
-                  setCompetences(updatedCompetences);
-                }}
+                onChange={(e) =>
+                  updateCompetenceField(index, "link", e.target.value)
+                }
                 className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
             </div>
@@ -79,8 +86,8 @@ const Competences = ({
 };
 
 Competences.propTypes = {
-  competences: PropTypes.array.isRequired,
-  setCompetences: PropTypes.func.isRequired,
+  formData: PropTypes.object.isRequired,
+  handleChange: PropTypes.func.isRequired,
   handleAjouterCompetence: PropTypes.func.isRequired,
   handleSupprimerCompetence: PropTypes.func.isRequired,
 };

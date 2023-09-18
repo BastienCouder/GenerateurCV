@@ -1,109 +1,111 @@
 import { useState } from "react";
-import FormProfil from "../components/Profil";
+import PersonalInfo from "../components/Profil";
+import Experience from "../components/Experiences";
 import Competences from "../components/Competences";
-import Experiences from "../components/Experiences";
 import Hobbies from "../components/Hobbies";
-import { useDispatch } from "react-redux";
 import SocialMediaInput from "../components/SocialMediaInput";
-
-//icons
-import { AiFillGithub, AiFillLinkedin } from "react-icons/ai";
-import { createPDF } from "../store/actions/pdf.actions";
+import {
+  AiFillGithub,
+  AiFillLinkedin,
+  AiFillTwitterCircle,
+} from "react-icons/ai";
+import { BsGlobe } from "react-icons/bs";
 
 const Form = () => {
-  const dispatch = useDispatch();
-  const [nom, setNom] = useState("");
-  const [prenom, setPrenom] = useState("");
-  const [avatar, setAvatar] = useState("");
-  const [email, setEmail] = useState("");
-  const [tel, setTel] = useState("");
-  const [reseauxSociaux, setReseauxSociaux] = useState([
-    { network: "Linkedin", value: "" },
-    { network: "Github", value: "" },
-  ]);
-  const [profil, setProfil] = useState("");
-  const [experiences, setExperiences] = useState([
-    { date: "", description: "" },
-  ]);
-  const [hobbies, setHobbies] = useState([]);
-  const [competences, setCompetences] = useState([
-    { description: "", link: "" },
-  ]);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    education: "",
+    experiences: [{ date: "", lieu: "", description: "" }],
+    competences: [{ description: "", link: "" }],
+    languages: "",
+    certifications: "",
+    hobbies: [""],
+    socialnetwork: [
+      { network: "linkedin", value: "" },
+      { network: "twitter", value: "" },
+      { network: "github", value: "" },
+      { network: "website", value: "" },
+    ],
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  console.log(formData);
 
   const handleAjouterExperience = () => {
-    setExperiences([...experiences, { date: "", description: "" }]);
+    const nouvelleExperience = { date: "", lieu: "", description: "" };
+    setFormData({
+      ...formData,
+      experiences: [...formData.experiences, nouvelleExperience],
+    });
   };
 
   const handleSupprimerExperience = (index) => {
-    const updatedExperiences = [...experiences];
-    updatedExperiences.splice(index, 1);
-    setExperiences(updatedExperiences);
-  };
-
-  const handleAjouterHobbie = () => {
-    setHobbies([...hobbies, ""]);
-  };
-
-  const handleSupprimerHobbie = (index) => {
-    const updatedHobbies = [...hobbies];
-    updatedHobbies.splice(index, 1);
-    setHobbies(updatedHobbies);
+    const experiencesCopie = [...formData.experiences];
+    experiencesCopie.splice(index, 1);
+    setFormData({
+      ...formData,
+      experiences: experiencesCopie,
+    });
   };
 
   const handleAjouterCompetence = () => {
-    setCompetences([...competences, ""]);
+    const nouvelleCompetence = { description: "", link: "" };
+    setFormData({
+      ...formData,
+      competences: [...formData.competences, nouvelleCompetence],
+    });
   };
 
   const handleSupprimerCompetence = (index) => {
-    const updatedCompetences = [...competences];
-    updatedCompetences.splice(index, 1);
-    setCompetences(updatedCompetences);
+    const competencesCopie = [...formData.competences];
+    competencesCopie.splice(index, 1);
+    setFormData({
+      ...formData,
+      competences: competencesCopie,
+    });
   };
 
-  const handleSocialMediaChange = (index, newValue) => {
-    const updatedReseauxSociaux = [...reseauxSociaux];
-    updatedReseauxSociaux[index].value = newValue;
-    setReseauxSociaux(updatedReseauxSociaux);
+  const handleAjouterHobbie = () => {
+    const nouvelleHobbie = "";
+    setFormData({
+      ...formData,
+      hobbies: [...formData.hobbies, nouvelleHobbie],
+    });
+  };
+
+  const handleSupprimerHobbie = (index) => {
+    const hobbiesCopie = [...formData.hobbies];
+    hobbiesCopie.splice(index, 1);
+    setFormData({
+      ...formData,
+      hobbies: hobbiesCopie,
+    });
+  };
+
+  const handleInputChange = (name, value) => {
+    setFormData({
+      ...formData,
+      socialnetwork: formData.socialnetwork.map((item) =>
+        item.network === name ? { ...item, value } : item
+      ),
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const data = new FormData();
-
-    data.append("name", nom);
-    data.append("surname", prenom);
-    data.append("email", email);
-    data.append("tel", tel);
-
-    if (avatar) {
-      data.append("picture", avatar);
-    }
-
-    data.append(
-      "github",
-      reseauxSociaux.find((item) => item.network === "Github")?.value || ""
-    );
-    data.append(
-      "linkedin",
-      reseauxSociaux.find((item) => item.network === "Linkedin")?.value || ""
-    );
-
-    // Ajoutez les compétences, expériences et hobbies au Data ici
-    competences.forEach((competence) => {
-      data.append("competences", competence.description);
-    });
-
-    experiences.forEach((experience) => {
-      data.append("experiences", experience.description);
-    });
-
-    hobbies.forEach((hobbie) => {
-      data.append("hobbies", hobbie);
-    });
-
-    dispatch(createPDF(data));
-    console.log(data);
+    // Vous pouvez traiter les données du formulaire ici
+    console.log(formData);
   };
 
   return (
@@ -115,53 +117,40 @@ const Form = () => {
             <h2 className="text-xl font-bold mb-1">Profil</h2>
             <div className="border-b-4 border-gray-900 mb-4"></div>
             <div className="flex flex-row w-full gap-x-10">
-              <FormProfil
-                nom={nom}
-                setNom={setNom}
-                prenom={prenom}
-                setPrenom={setPrenom}
-                avatar={avatar}
-                setAvatar={setAvatar}
-                email={email}
-                setEmail={setEmail}
-                tel={tel}
-                setTel={setTel}
-                profil={profil}
-                setProfil={setProfil}
-              />
-
+              <PersonalInfo formData={formData} handleChange={handleChange} />
               <div className="flex flex-col sm:w-1/2 mb-4 gap-y-2">
-                {reseauxSociaux.map((item, index) => (
+                {formData.socialnetwork.map((item, index) => (
                   <SocialMediaInput
                     key={index}
                     network={item.network}
                     icon={getSocialMediaIcon(item.network)}
                     value={item.value}
-                    onChange={(value) => handleSocialMediaChange(index, value)}
+                    handleChange={handleInputChange}
                   />
                 ))}
               </div>
             </div>
           </div>
         </div>
-        <Experiences
-          experiences={experiences}
-          setExperiences={setExperiences}
+        <Experience
+          formData={formData}
+          handleChange={handleChange}
           handleAjouterExperience={handleAjouterExperience}
           handleSupprimerExperience={handleSupprimerExperience}
         />
         <Competences
-          competences={competences}
-          setCompetences={setCompetences}
+          formData={formData}
+          handleChange={handleChange}
           handleAjouterCompetence={handleAjouterCompetence}
           handleSupprimerCompetence={handleSupprimerCompetence}
         />
         <Hobbies
-          hobbies={hobbies}
-          setHobbies={setHobbies}
+          formData={formData}
+          handleChange={handleChange}
           handleAjouterHobbie={handleAjouterHobbie}
           handleSupprimerHobbie={handleSupprimerHobbie}
         />
+
         <button
           type="submit"
           className="bg-green-500 text-white p-2 rounded hover:bg-green-600"
@@ -175,13 +164,16 @@ const Form = () => {
 
 const getSocialMediaIcon = (network) => {
   switch (network) {
-    case "Linkedin":
+    case "linkedin":
       return <AiFillLinkedin />;
-    case "Github":
+    case "github":
       return <AiFillGithub />;
+    case "twitter":
+      return <AiFillTwitterCircle />;
+    case "website":
+      return <BsGlobe />;
     default:
       return null;
   }
 };
-
 export default Form;

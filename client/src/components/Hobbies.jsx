@@ -1,18 +1,29 @@
 import PropTypes from "prop-types";
 
 const Hobbies = ({
-  hobbies,
-  setHobbies,
-  handleAjouterHobbie,
+  formData,
+  handleChange,
   handleSupprimerHobbie,
+  handleAjouterHobbie,
 }) => {
+  const hobbies = formData.hobbies;
+
+  const updateHobbieField = (index, value) => {
+    const updatedHobbies = [...hobbies];
+    updatedHobbies[index] = value;
+
+    handleChange({
+      target: {
+        name: "hobbies",
+        value: updatedHobbies,
+      },
+    });
+  };
+
   return (
     <div className="mb-4">
-      <p className="text-xl font-bold mb-1">Hobbies</p>
+      <h2 className="text-xl font-bold mb-1">Hobbies</h2>
       <div className="border-b-4 border-gray-900 mb-4"></div>
-      <label className="hidden mb-4 text-sm font-medium text-gray-900 dark:text-gray-900">
-        Hobbies :
-      </label>
       {hobbies.map((hobbie, index) => (
         <div key={index} className="mb-2">
           <p className="mb-1">Hobbie {index + 1}</p>
@@ -22,12 +33,9 @@ const Hobbies = ({
               <input
                 type="text"
                 placeholder="Hobbie"
-                value={hobbie}
-                onChange={(e) => {
-                  const updatedHobbies = [...hobbies];
-                  updatedHobbies[index] = e.target.value;
-                  setHobbies(updatedHobbies);
-                }}
+                name={`hobbies[${index}]`}
+                value={hobbie.description}
+                onChange={(e) => updateHobbieField(index, e.target.value)}
                 className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
             </div>
@@ -55,8 +63,8 @@ const Hobbies = ({
 };
 
 Hobbies.propTypes = {
-  hobbies: PropTypes.array.isRequired,
-  setHobbies: PropTypes.func.isRequired,
+  formData: PropTypes.object.isRequired,
+  handleChange: PropTypes.func.isRequired,
   handleAjouterHobbie: PropTypes.func.isRequired,
   handleSupprimerHobbie: PropTypes.func.isRequired,
 };

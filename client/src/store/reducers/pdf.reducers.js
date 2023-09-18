@@ -1,4 +1,4 @@
-import { CREATE_PDF, GET_PDF_ERRORS } from "../actions/pdf.actions";
+import { CREATE_PDF, GET_PDF_ERRORS, READ_PDF } from "../actions/pdf.actions";
 
 const initialState = {
   pdf: null,
@@ -7,6 +7,8 @@ const initialState = {
 
 const pdfReducer = (etat = initialState, action) => {
   switch (action.type) {
+    case READ_PDF:
+      return action.payload;
     case CREATE_PDF:
       return {
         ...etat,

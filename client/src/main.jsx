@@ -9,11 +9,14 @@ import thunk from "redux-thunk";
 
 // DevTools
 import { composeWithDevTools } from "redux-devtools-extension";
+import { readPdf } from "./store/actions/pdf.actions.js";
 
 const store = createStore(
   rootReducer,
   composeWithDevTools(applyMiddleware(thunk))
 );
+
+store.dispatch(readPdf());
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>

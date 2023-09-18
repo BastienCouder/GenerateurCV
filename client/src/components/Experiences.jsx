@@ -1,26 +1,34 @@
 import PropTypes from "prop-types";
-
-//icons
 import { BsFillCalendarDateFill } from "react-icons/bs";
 import { MdPlace } from "react-icons/md";
 
-const Experiences = ({
-  experiences,
-  setExperiences,
-  handleAjouterExperience,
+const Experience = ({
+  formData,
+  handleChange,
   handleSupprimerExperience,
+  handleAjouterExperience,
 }) => {
+  const experiences = formData.experiences;
+
+  const updateExperienceField = (index, field, value) => {
+    const updatedExperiences = [...experiences];
+    updatedExperiences[index][field] = value;
+
+    handleChange({
+      target: {
+        name: "experiences",
+        value: updatedExperiences,
+      },
+    });
+  };
+
   return (
     <div className="mb-4">
-      <p className="text-xl font-bold mb-1">Experiences</p>
+      <p className="text-xl font-bold mb-1">Expériences</p>
       <div className="border-b-4 border-gray-900 mb-4"></div>
-      <label className="hidden mb-4 text-sm font-medium text-gray-900 dark:text-gray-900">
-        Expériences :
-      </label>
-      {experiences.map((experience, index) => (
-        <div key={index} className="mb-2 ">
+      {formData.experiences.map((experience, index) => (
+        <div key={index} className="mb-2">
           <p className="mb-1">Expérience {index + 1}</p>
-
           <div className="flex justify-between flex-col gap-y-2 text-white text-lg">
             <div className="flex gap-x-4">
               <div className="relative sm:w-1/4">
@@ -30,16 +38,14 @@ const Experiences = ({
                 <input
                   type="text"
                   placeholder="Date"
+                  name={`experiences[${index}].date`}
                   value={experience.date}
-                  onChange={(e) => {
-                    const updatedExperiences = [...experiences];
-                    updatedExperiences[index].date = e.target.value;
-                    setExperiences(updatedExperiences);
-                  }}
+                  onChange={(e) =>
+                    updateExperienceField(index, "date", e.target.value)
+                  }
                   className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 />
               </div>
-
               <div className="relative sm:w-1/4">
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
                   <MdPlace />
@@ -47,12 +53,11 @@ const Experiences = ({
                 <input
                   type="text"
                   placeholder="Lieu"
+                  name={`experiences[${index}].lieu`}
                   value={experience.lieu}
-                  onChange={(e) => {
-                    const updatedExperiences = [...experiences];
-                    updatedExperiences[index].lieu = e.target.value;
-                    setExperiences(updatedExperiences);
-                  }}
+                  onChange={(e) =>
+                    updateExperienceField(index, "lieu", e.target.value)
+                  }
                   className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 />
               </div>
@@ -61,12 +66,11 @@ const Experiences = ({
               <textarea
                 type="text"
                 placeholder="Description"
+                name={`experiences[${index}].description`}
                 value={experience.description}
-                onChange={(e) => {
-                  const updatedExperiences = [...experiences];
-                  updatedExperiences[index].description = e.target.value;
-                  setExperiences(updatedExperiences);
-                }}
+                onChange={(e) =>
+                  updateExperienceField(index, "description", e.target.value)
+                }
                 className="resize-none w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
             </div>
@@ -80,7 +84,7 @@ const Experiences = ({
           </button>
         </div>
       ))}
-      {experiences.length < 4 ? (
+      {formData.experiences.length < 4 ? (
         <button
           type="button"
           onClick={handleAjouterExperience}
@@ -93,11 +97,11 @@ const Experiences = ({
   );
 };
 
-Experiences.propTypes = {
-  experiences: PropTypes.array.isRequired,
-  setExperiences: PropTypes.func.isRequired,
+Experience.propTypes = {
+  formData: PropTypes.object.isRequired,
+  handleChange: PropTypes.func.isRequired,
   handleAjouterExperience: PropTypes.func.isRequired,
   handleSupprimerExperience: PropTypes.func.isRequired,
 };
 
-export default Experiences;
+export default Experience;

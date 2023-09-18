@@ -18,7 +18,7 @@ module.exports.readPdf = async (req, res) => {
 module.exports.createPdf = async (req, res) => {
   try {
     const pdfData = req.body;
-    console.log("Données : ", pdfData);
+    console.log("Données: ", pdfData);
 
     const existingPdfData = await PdfModel.findOne({
       name: pdfData.name,
