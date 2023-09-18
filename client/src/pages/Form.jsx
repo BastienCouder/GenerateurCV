@@ -143,7 +143,7 @@ const Form = () => {
   };
 
   return (
-    <div className="p-5 md:p-40">
+    <div className="p-5 md:px-20 md:py-10">
       <h1 className="text-4xl font-bold mb-12">Generateur de CV</h1>
       <form onSubmit={handleSubmit}>
         <div className="flex w-full gap-x-12">
