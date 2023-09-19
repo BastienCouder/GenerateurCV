@@ -5,11 +5,7 @@ import Competences from "../components/Competences";
 import Languages from "../components/Languages";
 import Hobbies from "../components/Hobbies";
 import SocialMediaInput from "../components/SocialMediaInput";
-import {
-  AiFillGithub,
-  AiFillLinkedin,
-  AiFillTwitterCircle,
-} from "react-icons/ai";
+import { AiFillGithub, AiFillInstagram, AiFillLinkedin } from "react-icons/ai";
 import { BsGlobe } from "react-icons/bs";
 import Education from "../components/Educations";
 import { apiUrl } from "../utils/Utils";
@@ -21,6 +17,7 @@ const Form = () => {
       {
         prenom: "",
         nom: "",
+        status: "",
         email: "",
         tel: "",
         avatar: "",
@@ -28,9 +25,9 @@ const Form = () => {
         profil: "",
       },
     ],
-    educations: [{ diplome: "", annee: "" }],
+    educations: [{ diplome: "", date: "", lieu: "" }],
     experiences: [{ date: "", lieu: "", description: "" }],
-    competences: [{ description: "", link: "" }],
+    competences: [""],
     languages: [{ language: "", level: "" }],
     hobbies: [""],
     socialnetwork: [
@@ -241,9 +238,9 @@ const getSocialMediaIcon = (network) => {
       return <AiFillLinkedin />;
     case "github":
       return <AiFillGithub />;
-    case "twitter":
-      return <AiFillTwitterCircle />;
-    case "website":
+    case "instagram":
+      return <AiFillInstagram />;
+    case "web":
       return <BsGlobe />;
     default:
       return null;

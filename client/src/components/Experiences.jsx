@@ -62,7 +62,7 @@ const Experience = ({
                 />
               </div>
             </div>
-            <div className="relative sm:w-3/4">
+            <div className="relative sm:w-1/2">
               <textarea
                 type="text"
                 placeholder="Description"
@@ -71,7 +71,7 @@ const Experience = ({
                 onChange={(e) =>
                   updateExperienceField(index, "description", e.target.value)
                 }
-                className="resize-none w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="resize-none w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
             </div>
           </div>

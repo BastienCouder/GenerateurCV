@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { MdEmail } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import { BsFillTelephoneFill } from "react-icons/bs";
+import { BiSolidUserAccount } from "react-icons/bi";
 import { AiFillHome } from "react-icons/ai";
 
 const FormInputField = ({ id, value, type, onChange, placeholder, icon }) => (
@@ -56,6 +57,14 @@ const PersonalInfo = ({ formData, handleChange }) => {
             onChange={(e) => updatePersonalInfoField("nom", e.target.value)}
             placeholder="Nom"
             icon={<FaUserCircle />}
+          />
+          <FormInputField
+            id="status"
+            value={personalInfo.status}
+            type="text"
+            onChange={(e) => updatePersonalInfoField("status", e.target.value)}
+            placeholder="Status"
+            icon={<BiSolidUserAccount />}
           />
         </div>
         <div className="flex gap-x-4 justify-between w-full items-center text-white text-lg">

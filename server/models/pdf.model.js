@@ -10,6 +10,9 @@ const pdfSchema = mongoose.Schema(
         nom: {
           type: String,
         },
+        status: {
+          type: String,
+        },
         email: {
           type: String,
         },
@@ -32,7 +35,10 @@ const pdfSchema = mongoose.Schema(
         diplome: {
           type: String,
         },
-        annee: {
+        date: {
+          type: String,
+        },
+        lieu: {
           type: String,
         },
       },
@@ -52,12 +58,7 @@ const pdfSchema = mongoose.Schema(
     ],
     competences: [
       {
-        description: {
-          type: String,
-        },
-        link: {
-          type: String,
-        },
+        type: String,
       },
     ],
     languages: [
