@@ -2,7 +2,7 @@ const fs = require("fs");
 const PDFDocument = require("pdfkit");
 
 // Déplacement de la logique de création du PDF dans une fonction
-function createInvoice(pdfData, pdfPath) {
+function createInvoice(pdfData, picturePath, pdfPath) {
   let doc = new PDFDocument({ size: "legal", margin: 20 });
   const lineWidth = 2;
 
@@ -50,11 +50,13 @@ function createInvoice(pdfData, pdfPath) {
       align: "center",
     });
 
+  const maxWidthForstatusText = 300;
   doc
     .font("Helvetica")
     .fontSize(14)
-    .text(pdfData.personalInfos[0].status, 240, 90, {
+    .text(pdfData.personalInfos[0].status, 260, 90, {
       align: "center",
+      width: maxWidthForstatusText,
     });
 
   // Profil
@@ -157,7 +159,6 @@ function createInvoice(pdfData, pdfPath) {
   const svgEmailFilePath = __dirname + "/images/envelope.png";
   doc.image(svgEmailFilePath, 30, yPositionContact, {
     width: 12,
-    height: 12,
   });
   yPositionContact += 2;
 
@@ -169,7 +170,6 @@ function createInvoice(pdfData, pdfPath) {
   const svgTelFilePath = __dirname + "/images/phone.png";
   doc.image(svgTelFilePath, 30, yPositionContact, {
     width: 12,
-    height: 12,
   });
   yPositionContact += 3;
 
@@ -183,7 +183,6 @@ function createInvoice(pdfData, pdfPath) {
   const svgHomeFilePath = __dirname + "/images/house.png";
   doc.image(svgHomeFilePath, 30, yPositionContact, {
     width: 12,
-    height: 12,
   });
   yPositionContact += 3;
 
@@ -242,6 +241,8 @@ function createInvoice(pdfData, pdfPath) {
 
   doc.fillColor(blueFillColor);
 
+  const maxWidthForRightText = 220;
+
   // Expériences
   let yPositionExperiences = 150;
   let xPositionExperiences = 260;
@@ -262,10 +263,10 @@ function createInvoice(pdfData, pdfPath) {
     Array.isArray(pdfData.experiences) &&
     pdfData.experiences.length > 0
   ) {
-    yPositionExperiences -= 15;
+    yPositionExperiences -= 20;
     pdfData.experiences.forEach((experience) => {
       if (experience.description && experience.lieu && experience.date) {
-        yPositionExperiences += 60;
+        yPositionExperiences += 55;
         doc
           .fontSize(14)
           .text(
@@ -296,7 +297,11 @@ function createInvoice(pdfData, pdfPath) {
           .text(
             `${descriptionCapitalized}`,
             xPositionExperiences + 90,
-            yPositionExperiences + 15
+            yPositionExperiences + 15,
+            {
+              align: "left",
+              width: maxWidthForRightText,
+            }
           );
       }
     });
@@ -305,7 +310,7 @@ function createInvoice(pdfData, pdfPath) {
   }
 
   // Études
-  let yPositionEtudes = 330;
+  let yPositionEtudes = 360;
   let xPositionEtudes = 260;
   doc
     .font("Helvetica")
@@ -324,10 +329,10 @@ function createInvoice(pdfData, pdfPath) {
     Array.isArray(pdfData.educations) &&
     pdfData.educations.length > 0
   ) {
-    yPositionEtudes -= 15;
+    yPositionEtudes -= 20;
     pdfData.educations.forEach((education) => {
       if (education.diplome && education.date && education.lieu) {
-        yPositionEtudes += 60;
+        yPositionEtudes += 55;
         doc
           .fontSize(14)
           .text(`${education.date}`, xPositionEtudes, yPositionEtudes);
@@ -361,12 +366,12 @@ function createInvoice(pdfData, pdfPath) {
   }
 
   //compétences
-  let yPositionCompetences = 520;
+  let yPositionCompetences = 570;
   let xPositionCompetences = 260;
 
   doc
     .fontSize(18)
-    .text("Compétences :", xPositionCompetences, yPositionCompetences);
+    .text("Compétences", xPositionCompetences, yPositionCompetences);
 
   // Ligne sous le titre des compétences
   doc.lineWidth(lineWidth);
@@ -385,7 +390,7 @@ function createInvoice(pdfData, pdfPath) {
       const competence2 =
         i + 1 < pdfData.competences.length ? pdfData.competences[i + 1] : null;
 
-      yPositionCompetences += 40;
+      yPositionCompetences += 30;
       doc.fontSize(14).text(`${competence1}`, 260, yPositionCompetences);
 
       if (competence2) {
@@ -400,7 +405,7 @@ function createInvoice(pdfData, pdfPath) {
   let yPositionHobbies = 750;
   let xPositionHobbies = 260;
 
-  doc.fontSize(18).text("Hobbies :", xPositionHobbies, yPositionHobbies);
+  doc.fontSize(18).text("Hobbies", xPositionHobbies, yPositionHobbies);
 
   // Ligne sous le titre des hobbies
   doc.lineWidth(lineWidth);
@@ -416,7 +421,7 @@ function createInvoice(pdfData, pdfPath) {
   ) {
     yPositionHobbies += 5;
     pdfData.hobbies.forEach((hobby) => {
-      yPositionHobbies += 40;
+      yPositionHobbies += 30;
       doc.fontSize(14).text(`${hobby}`, xPositionHobbies, yPositionHobbies);
     });
   } else {
@@ -435,10 +440,10 @@ function createInvoice(pdfData, pdfPath) {
     .lineWidth(2) // Largeur de la bordure
     .stroke();
 
-  // // Ajoute la photo à l'intérieur du cercle
-  // if (fs.existsSync(avatarPath)) {
-  //   doc.image(avatarPath, 50, 100, { width: 100, height: 100 });
-  // }
+  // Ajoute la photo à l'intérieur du cercle
+  if (fs.existsSync(picturePath)) {
+    doc.image(picturePath, 50, 100, { width: 100, height: 100 });
+  }
 
   doc.end();
 }

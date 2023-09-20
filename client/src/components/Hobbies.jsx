@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { AiFillControl } from "react-icons/ai";
 
 const Hobbies = ({
   formData,
@@ -27,17 +28,24 @@ const Hobbies = ({
       {hobbies.map((hobbie, index) => (
         <div key={index} className="mb-2">
           <p className="mb-1">Hobbie {index + 1}</p>
-
-          <div className="flex justify-between flex-col">
-            <div className="relative w-1/3">
-              <input
-                type="text"
-                placeholder="Hobbie"
-                name={`hobbies[${index}]`}
-                value={hobbie.description}
-                onChange={(e) => updateHobbieField(index, e.target.value)}
-                className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              />
+          <div className="flex justify-between flex-col gap-y-2 text-white text-lg">
+            <div className="flex gap-x-4">
+              <div className="relative sm:w-1/4">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
+                  <AiFillControl />
+                </div>
+                <input
+                  type="text"
+                  placeholder="Hobbie"
+                  name={`hobbies[${index}]`}
+                  value={hobbie}
+                  autoComplete="off"
+                  required
+                  maxLength={30}
+                  onChange={(e) => updateHobbieField(index, e.target.value)}
+                  className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                />
+              </div>
             </div>
             <button
               type="button"
@@ -53,7 +61,7 @@ const Hobbies = ({
         <button
           type="button"
           onClick={handleAjouterHobbie}
-          className="bg-green-700 text-white py-1.5 px-2.5 rounded-lg hover:bg-blue-600"
+          className="bg-green-700 text-white py-1.5 px-2.5 rounded-lg hover:bg-green-900"
         >
           Ajouter un hobbie
         </button>

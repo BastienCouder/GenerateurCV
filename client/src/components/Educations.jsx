@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { BsFillCalendarDateFill } from "react-icons/bs";
 import { FaGraduationCap } from "react-icons/fa";
+import { MdPlace } from "react-icons/md";
 
 const Education = ({
   formData,
@@ -40,6 +41,9 @@ const Education = ({
                   placeholder="Diplôme"
                   name={`educations[${index}].diplome`}
                   value={education.diplome}
+                  autoComplete="off"
+                  required
+                  maxLength={40}
                   onChange={(e) =>
                     updateEducationField(index, "diplome", e.target.value)
                   }
@@ -48,13 +52,16 @@ const Education = ({
               </div>
               <div className="relative sm:w-1/4">
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
-                  <FaGraduationCap />
+                  <MdPlace />
                 </div>
                 <input
                   type="text"
                   placeholder="Lieu"
                   name={`educations[${index}].lieu`}
                   value={education.lieu}
+                  autoComplete="off"
+                  required
+                  maxLength={70}
                   onChange={(e) =>
                     updateEducationField(index, "lieu", e.target.value)
                   }
@@ -69,8 +76,11 @@ const Education = ({
               <input
                 type="text"
                 placeholder="Année de graduation"
-                name={`educations[${index}].annee`}
-                value={education.annee}
+                name={`educations[${index}].date`}
+                value={education.date}
+                maxLength={10}
+                autoComplete="off"
+                required
                 onChange={(e) =>
                   updateEducationField(index, "date", e.target.value)
                 }
@@ -87,11 +97,11 @@ const Education = ({
           </button>
         </div>
       ))}
-      {formData.educations.length < 4 ? (
+      {formData.educations.length < 3 ? (
         <button
           type="button"
           onClick={handleAjouterEducation}
-          className="bg-green-700 text-white py-1.5 px-2.5 rounded-lg hover:bg-blue-600"
+          className="bg-green-700 text-white py-1.5 px-2.5 rounded-lg hover:bg-green-900"
         >
           Ajouter une éducation
         </button>

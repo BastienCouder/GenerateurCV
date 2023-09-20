@@ -41,6 +41,9 @@ const Language = ({
                   placeholder="Langue"
                   name={`languages[${index}.language`}
                   value={language.language}
+                  autoComplete="off"
+                  required
+                  maxLength={20}
                   onChange={(e) =>
                     updateLanguageField(index, "language", e.target.value)
                   }
@@ -56,6 +59,9 @@ const Language = ({
                   placeholder="Niveau"
                   name={`languages[${index}].level`}
                   value={language.level}
+                  autoComplete="off"
+                  required
+                  maxLength={2}
                   onChange={(e) =>
                     updateLanguageField(index, "level", e.target.value)
                   }
@@ -77,7 +83,7 @@ const Language = ({
         <button
           type="button"
           onClick={handleAjouterLanguage}
-          className="bg-green-700 text-white py-1.5 px-2.5 rounded-lg hover:bg-blue-600"
+          className="bg-green-700 text-white py-1.5 px-2.5 rounded-lg hover:bg-green-900"
         >
           Ajouter une langue
         </button>

@@ -22,6 +22,13 @@ const Experience = ({
     });
   };
 
+  const handleDescriptionChange = (index, value) => {
+    const lines = value.split("\n");
+    if (lines.length <= 2) {
+      updateExperienceField(index, "description", value);
+    }
+  };
+
   return (
     <div className="mb-4">
       <p className="text-xl font-bold mb-1">Expériences</p>
@@ -40,6 +47,9 @@ const Experience = ({
                   placeholder="Date"
                   name={`experiences[${index}].date`}
                   value={experience.date}
+                  maxLength={10}
+                  autoComplete="off"
+                  required
                   onChange={(e) =>
                     updateExperienceField(index, "date", e.target.value)
                   }
@@ -55,6 +65,9 @@ const Experience = ({
                   placeholder="Lieu"
                   name={`experiences[${index}].lieu`}
                   value={experience.lieu}
+                  autoComplete="off"
+                  required
+                  maxLength={30}
                   onChange={(e) =>
                     updateExperienceField(index, "lieu", e.target.value)
                   }
@@ -64,13 +77,16 @@ const Experience = ({
             </div>
             <div className="relative sm:w-1/2">
               <textarea
-                type="text"
+                type="textarea"
                 placeholder="Description"
                 name={`experiences[${index}].description`}
                 value={experience.description}
-                onChange={(e) =>
-                  updateExperienceField(index, "description", e.target.value)
-                }
+                autoComplete="off"
+                rows={2}
+                required
+                maxLength={70}
+                style={{ overflowY: "hidden" }}
+                onChange={(e) => handleDescriptionChange(index, e.target.value)}
                 className="resize-none w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pl-3 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
             </div>
@@ -84,11 +100,11 @@ const Experience = ({
           </button>
         </div>
       ))}
-      {formData.experiences.length < 4 ? (
+      {formData.experiences.length < 3 ? (
         <button
           type="button"
           onClick={handleAjouterExperience}
-          className="bg-green-700 text-white py-1.5 px-2.5 rounded-lg hover:bg-blue-600"
+          className="bg-green-700 text-white py-1.5 px-2.5 rounded-lg hover:bg-green-900"
         >
           Ajouter une expérience
         </button>

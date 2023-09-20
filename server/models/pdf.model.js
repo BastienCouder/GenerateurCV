@@ -19,9 +19,7 @@ const pdfSchema = mongoose.Schema(
         tel: {
           type: String,
         },
-        avatar: {
-          type: String,
-        },
+        avatar: { type: Object },
         address: {
           type: String,
         },
@@ -61,6 +59,7 @@ const pdfSchema = mongoose.Schema(
         type: String,
       },
     ],
+
     languages: [
       {
         language: {

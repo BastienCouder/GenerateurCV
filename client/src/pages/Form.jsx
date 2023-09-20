@@ -38,12 +38,30 @@ const Form = () => {
     ],
   });
 
+  console.log(formData);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]; // Obtenez le premier fichier sélectionné
+
+    if (file) {
+      setFormData({
+        ...formData,
+        personalInfos: [
+          {
+            ...formData.personalInfos[0],
+            avatar: file, // Mettez le fichier dans le champ "avatar"
+          },
+        ],
+      });
+    }
   };
 
   const handleAjouterEducation = () => {
@@ -81,7 +99,7 @@ const Form = () => {
   };
 
   const handleAjouterCompetence = () => {
-    const nouvelleCompetence = { description: "", link: "" };
+    const nouvelleCompetence = "";
     setFormData({
       ...formData,
       competences: [...formData.competences, nouvelleCompetence],
@@ -138,22 +156,84 @@ const Form = () => {
       ),
     });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const response = await axios.post(`${apiUrl}/pdf`, formData, {
+      const formDataToSend = new FormData();
+
+      // Correspondance des champs du formulaire avec le schéma Mongoose
+      const personalInfo = formData.personalInfos[0];
+      formDataToSend.append(
+        "personalInfos[0][avatar]",
+        personalInfo.avatar || ""
+      );
+      formDataToSend.append(
+        "personalInfos[0][prenom]",
+        personalInfo.prenom || ""
+      );
+      formDataToSend.append("personalInfos[0][nom]", personalInfo.nom || "");
+      formDataToSend.append(
+        "personalInfos[0][status]",
+        personalInfo.status || ""
+      );
+      formDataToSend.append(
+        "personalInfos[0][email]",
+        personalInfo.email || ""
+      );
+      formDataToSend.append("personalInfos[0][tel]", personalInfo.tel || "");
+      formDataToSend.append(
+        "personalInfos[0][address]",
+        personalInfo.address || ""
+      );
+      formDataToSend.append(
+        "personalInfos[0][profil]",
+        personalInfo.profil || ""
+      );
+
+      const education = formData.educations;
+      formDataToSend.append("educations[0][diplome]", education.diplome || "");
+      formDataToSend.append("educations[0][date]", education.date || "");
+      formDataToSend.append("educations[0][lieu]", education.lieu || "");
+
+      const experience = formData.experiences;
+      formDataToSend.append("experiences[0][date]", experience.date || "");
+      formDataToSend.append("experiences[0][lieu]", experience.lieu || "");
+      formDataToSend.append(
+        "experiences[0][description]",
+        experience.description || ""
+      );
+
+      for (let i = 0; i < formData.competences.length; i++) {
+        formDataToSend.append("competences[]", formData.competences[i] || "");
+      }
+
+      for (let i = 0; i < formData.languages.length; i++) {
+        formDataToSend.append(
+          "languages[][language]",
+          formData.languages[i].language || ""
+        );
+        formDataToSend.append(
+          "languages[][level]",
+          formData.languages[i].level || ""
+        );
+      }
+
+      for (let i = 0; i < formData.hobbies.length; i++) {
+        formDataToSend.append("hobbies[]", formData.hobbies[i] || "");
+      }
+
+      const response = await axios.post(`${apiUrl}/pdf`, formDataToSend, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       });
 
-      if (response.status === 200) {
-        // Utilisez response.status pour vérifier le statut HTTP
-        const responseData = response.data; // Pas besoin d'appeler .json() ici
+      if (response.status === 201) {
+        const responseData = response.data;
         console.log("Réponse du serveur : ", responseData);
 
-        if (responseData.message === "Données ajoutées avec succès") {
+        if (responseData.message === "PDF généré avec succès") {
           console.log("PDF généré avec succès.");
         }
       } else {
@@ -162,20 +242,22 @@ const Form = () => {
     } catch (error) {
       console.error("Erreur lors de la génération du PDF.", error);
     }
-
-    console.log(formData);
   };
 
   return (
     <div className="p-5 md:px-20 md:py-10">
       <h1 className="text-4xl font-bold mb-12">Generateur de CV</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="flex w-full gap-x-12">
           <div className="flex flex-col w-full">
             <h2 className="text-xl font-bold mb-1">Profil</h2>
             <div className="border-b-4 border-gray-900 mb-4"></div>
-            <div className="flex flex-row w-full gap-x-10">
-              <PersonalInfo formData={formData} handleChange={handleChange} />
+            <div className="flex flex-col md:flex-row w-full gap-x-10">
+              <PersonalInfo
+                formData={formData}
+                handleChange={handleChange}
+                handleFileChange={handleFileChange}
+              />
               <div className="flex flex-col sm:w-1/2 mb-4 gap-y-2">
                 {formData.socialnetwork.map((item, index) => (
                   <SocialMediaInput
@@ -223,9 +305,9 @@ const Form = () => {
 
         <button
           type="submit"
-          className="bg-green-500 text-white p-2 rounded hover:bg-green-600"
+          className="bg-blue-700 text-white py-1.5 px-2.5 rounded-lg hover:bg-blue-900"
         >
-          Enregistrer
+          Obtenir mon cv
         </button>
       </form>
     </div>

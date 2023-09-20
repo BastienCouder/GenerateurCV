@@ -1,3 +1,12 @@
 body {
-  background: #e3e3e3;
+  background: rgb(225, 227, 217);
+  background: radial-gradient(
+    circle,
+    rgba(225, 227, 217, 1) 0%,
+    rgba(231, 238, 245, 1) 53%
+  );
+}
+
+::-webkit-scrollbar {
+  display: none;
 }

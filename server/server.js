@@ -1,5 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv").config();
+const bodyParser = require("body-parser");
 const http = require("http");
 const connectDB = require("./config/db");
 const cors = require("cors");
@@ -11,16 +12,15 @@ connectDB();
 const app = express();
 const server = http.createServer(app);
 
-app.use(cors());
 // Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json()); // Pour gérer les données JSON
+app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.text({ type: "/" }));
 
 const corsOptions = {
   origin: [process.env.CLIENT_URL],
   credentials: true,
 };
-
 app.use(cors(corsOptions));
 
 // Routes
