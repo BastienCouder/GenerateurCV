@@ -38,8 +38,6 @@ const Form = () => {
     ],
   });
 
-  console.log(formData);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -156,13 +154,34 @@ const Form = () => {
       ),
     });
   };
+
+  const handleResetImage = () => {
+    const updatedPersonalInfo = { ...formData.personalInfos[0] };
+    updatedPersonalInfo.avatar = ""; // Réinitialisez la propriété avatar à une chaîne vide
+    const updatedFormData = { ...formData };
+    updatedFormData.personalInfos[0] = updatedPersonalInfo; // Mise à jour de formData avec la nouvelle valeur
+    handleChange({
+      target: {
+        name: "personalInfos",
+        value: [updatedPersonalInfo],
+      },
+    });
+    setFormData(updatedFormData); // Mettez à jour le state formData avec la nouvelle valeur
+
+    // Réinitialisez la valeur de l'input file
+    const fileInput = document.getElementById("avatar");
+    if (fileInput) {
+      fileInput.value = ""; // Définissez la valeur du champ input sur une chaîne vide
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const formDataToSend = new FormData();
 
-      // Correspondance des champs du formulaire avec le schéma Mongoose
+      formDataToSend.append("avatar", formData.avatar || "");
       const personalInfo = formData.personalInfos[0];
       formDataToSend.append(
         "personalInfos[0][avatar]",
@@ -257,6 +276,7 @@ const Form = () => {
                 formData={formData}
                 handleChange={handleChange}
                 handleFileChange={handleFileChange}
+                handleResetImage={handleResetImage}
               />
               <div className="flex flex-col sm:w-1/2 mb-4 gap-y-2">
                 {formData.socialnetwork.map((item, index) => (

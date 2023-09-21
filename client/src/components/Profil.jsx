@@ -42,7 +42,12 @@ FormInputField.propTypes = {
   icon: PropTypes.node.isRequired,
 };
 
-const PersonalInfo = ({ formData, handleChange, handleFileChange }) => {
+const PersonalInfo = ({
+  formData,
+  handleChange,
+  handleFileChange,
+  handleResetImage,
+}) => {
   const personalInfo = formData.personalInfos[0];
 
   const updatePersonalInfoField = (field, value) => {
@@ -118,14 +123,23 @@ const PersonalInfo = ({ formData, handleChange, handleFileChange }) => {
           icon={<AiFillHome />}
         />
       </div>
-      <input
-        id="avatar"
-        type="file"
-        name="avatar"
-        onChange={(e) => handleFileChange(e)}
-        placeholder="Choisir une photo de profil"
-        className="w-full block text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-      />
+      <div className="flex flex-col w-full gap-y-2">
+        <input
+          id="avatar"
+          type="file"
+          name="personalInfos[0][avatar]"
+          onChange={(e) => handleFileChange(e)}
+          placeholder="Choisir une photo de profil"
+          className="w-full block text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+        />
+        <button
+          type="button"
+          onClick={() => handleResetImage()}
+          className="w-28 bg-red-500 hover:bg-red-600 text-white text-sm px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
+        >
+          Réinitialiser
+        </button>
+      </div>
       <div className="mb-4">
         <textarea
           id="profil"
@@ -147,6 +161,7 @@ PersonalInfo.propTypes = {
   formData: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleFileChange: PropTypes.func.isRequired,
+  handleResetImage: PropTypes.func.isRequired,
 };
 
 export default PersonalInfo;

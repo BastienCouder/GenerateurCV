@@ -19,7 +19,7 @@ const pdfSchema = mongoose.Schema(
         tel: {
           type: String,
         },
-        avatar: { type: Object },
+        avatar: { type: String },
         address: {
           type: String,
         },

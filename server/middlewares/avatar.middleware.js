@@ -6,13 +6,13 @@ const storageEngine = multer.diskStorage({
   filename: function (req, file, callback) {
     callback(
       null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+      "avatar" + "-" + Date.now() + path.extname(file.originalname)
     );
   },
 });
 
 const fileFilter = (req, file, callback) => {
-  let pattern = /jpg|png|svg/; // reqex
+  let pattern = /jpg|jpeg|/; // reqex
 
   if (pattern.test(path.extname(file.originalname))) {
     callback(null, true);
@@ -26,6 +26,6 @@ const upload = multer({
   limits: {
     fileSize: 1024 * 1024 * 10, // 10 Mo
   },
-}).single("avatar");
+}).single("personalInfos[0][avatar]");
 
 module.exports = upload;

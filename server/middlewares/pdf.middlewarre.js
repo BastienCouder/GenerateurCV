@@ -8,9 +8,6 @@ function createInvoice(pdfData, picturePath, pdfPath) {
 
   doc.pipe(fs.createWriteStream(pdfPath));
 
-  console.log("Largeur de la page en points:", doc.page.width);
-  console.log("Hauteur de la page en points:", doc.page.height);
-
   const widthRectangle = 240;
   const heightRectangle = 1008;
 
@@ -429,20 +426,32 @@ function createInvoice(pdfData, picturePath, pdfPath) {
   }
 
   //Photo
+  const circleX = 125;
+  const circleY = 130;
+  const circleRadius = 60;
+  const padding = 5;
+
+  const imageX = circleX - circleRadius + padding;
+  const imageY = circleY - circleRadius + padding;
+  const imageWidth = (circleRadius - padding) * 2;
+  const imageHeight = (circleRadius - padding) * 2;
+
   const whiteStrokeColor = "#FFFFFF";
   doc.strokeColor(whiteStrokeColor);
 
-  let yPositionPhoto = 130;
-  let xPositionPhoto = 125;
+  //cercle
+  doc.circle(circleX, circleY, circleRadius).lineWidth(2).stroke();
 
-  doc
-    .circle(xPositionPhoto, yPositionPhoto, 60)
-    .lineWidth(2) // Largeur de la bordure
-    .stroke();
-
-  // Ajoute la photo à l'intérieur du cercle
+  // Chargez l'image à l'intérieur du cercle
   if (fs.existsSync(picturePath)) {
-    doc.image(picturePath, 50, 100, { width: 100, height: 100 });
+    doc.save();
+    doc.circle(circleX, circleY, circleRadius - padding).clip();
+    doc.rotate(90, { origin: [circleX, circleY] });
+    doc.image(picturePath, imageX, imageY, {
+      width: imageWidth,
+      height: imageHeight,
+    });
+    doc.restore();
   }
 
   doc.end();

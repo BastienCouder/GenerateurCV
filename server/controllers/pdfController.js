@@ -16,56 +16,87 @@ module.exports.readPdf = async (req, res) => {
 };
 
 // Create PDF
-module.exports.createPdf = async (req, res) => {
+module.exports.createPdf = async (req, res, next) => {
   try {
     if (req.is("multipart/form-data")) {
       console.log("Requête multipart reçue.");
-      // Affichez toutes les données de la requête
-      console.log("Données de la requête : ", req.body);
     }
 
-    // upload(req, res, async (err) => {
-    //   if (err) {
-    //     console.error("Erreur lors de l'upload :", err);
-    //     // Si l'upload échoue, continuez sans mettre à jour l'image.
-    //   } else {
-    const pdfData = req.body;
-    console.log("Données reçues : ", pdfData);
+    //file upload
+    if (req.file) {
+      const pdfData = req.body;
+      console.log("Données reçues : ", pdfData);
 
-    if (pdfData && pdfData.personalInfos) {
-      const email = pdfData.personalInfos[0].email;
+      picturePath = req.file.path;
+      console.log(picturePath);
 
-      console.log("Création de nouvelles données :", email);
-      await PdfModel.create(pdfData);
+      //create data
+      if (pdfData && pdfData.personalInfos) {
+        upload(req, res, async (err) => {
+          if (err) {
+            console.error("Erreur lors de l'upload :", err);
+          }
+        });
+        await PdfModel.create(pdfData);
 
-      const pdfFileName = `${pdfData.personalInfos[0].prenom}-cv.pdf`;
-      const pdfPath = path.join(
-        __dirname,
-        `../../client/public/uploads/pdf/${pdfFileName}`
-      );
+        //file pdf
+        const pdfFileName = `${pdfData.personalInfos[0].prenom}-cv.pdf`;
+        const pdfPath = path.join(
+          __dirname,
+          `../../client/public/uploads/pdf/${pdfFileName}`
+        );
 
-      console.log("Chemin du fichier PDF :", pdfPath);
+        if (req.file) {
+          await createInvoice(pdfData, req.file.path, pdfPath);
+          console.log("Une image a été incluse.");
+        } else {
+          await createInvoice(pdfData, null, pdfPath);
+          console.log("Aucune image incluse.");
+        }
 
-      let picturePath = null;
+        console.log("PDF généré avec succès :", pdfPath);
 
-      // Vérifiez si une image a été téléchargée avant d'appeler createInvoice
-      if (req.file) {
-        picturePath = req.file.path;
-        await createInvoice(pdfData, req.file.path, pdfPath);
-        console.log("Une image a été incluse.");
+        return res
+          .status(201)
+          .json({ message: "PDF généré avec succès", pdfData });
       } else {
-        await createInvoice(pdfData, null, pdfPath); // Aucune image à inclure
-        console.log("Aucune image incluse.");
+        console.error("Données reçues non valides : ", pdfData);
+        return res.status(400).json({ error: "Données reçues non valides" });
       }
-
-      console.log("PDF généré avec succès :", pdfPath);
-
-      return res
-        .status(201)
-        .json({ message: "PDF généré avec succès", pdfData });
     } else {
-      console.error("Données reçues non valides : ", pdfData);
-      return res.status(400).json({ error: "Données reçues non valides" });
+      const pdfData = req.body;
+      console.log("Données reçues : ", pdfData);
+
+      //create data
+      if (pdfData && pdfData.personalInfos) {
+        await PdfModel.create(pdfData);
+
+        //file pdf
+        const pdfFileName = `${pdfData.personalInfos[0].prenom}-cv.pdf`;
+        const pdfPath = path.join(
+          __dirname,
+          `../../client/public/uploads/pdf/${pdfFileName}`
+        );
+        let picturePath = null;
+
+        if (req.file) {
+          picturePath = req.file.path;
+          await createInvoice(pdfData, req.file.path, pdfPath);
+          console.log("Une image a été incluse.");
+        } else {
+          await createInvoice(pdfData, null, pdfPath);
+          console.log("Aucune image incluse.");
+        }
+
+        console.log("PDF généré avec succès :", pdfPath);
+
+        return res
+          .status(201)
+          .json({ message: "PDF généré avec succès", pdfData });
+      } else {
+        console.error("Données reçues non valides : ", pdfData);
+        return res.status(400).json({ error: "Données reçues non valides" });
+      }
     }
   } catch (error) {
     console.error(
