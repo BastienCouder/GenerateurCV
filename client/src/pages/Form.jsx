@@ -265,7 +265,9 @@ const Form = () => {
 
   return (
     <div className="p-5 md:px-20 md:py-10">
-      <h1 className="text-4xl font-bold mb-12">Generateur de CV</h1>
+      <h1 className=" text-3xl md:text-4xl font-bold mb-6 ">
+        Generateur de CV
+      </h1>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="flex w-full gap-x-12">
           <div className="flex flex-col w-full">
