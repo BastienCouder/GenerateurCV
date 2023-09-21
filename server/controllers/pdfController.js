@@ -2,7 +2,6 @@ const { createInvoice } = require("../middlewares/pdf.middlewarre");
 const PdfModel = require("../models/pdf.model");
 const path = require("path");
 const multer = require("multer");
-const upload = require("../middlewares/avatar.middleware");
 
 // Récupérer tous les PDF
 module.exports.readPdf = async (req, res) => {
@@ -15,89 +14,53 @@ module.exports.readPdf = async (req, res) => {
   }
 };
 
-// Create PDF
+//createPdf
 module.exports.createPdf = async (req, res, next) => {
   try {
     if (req.is("multipart/form-data")) {
       console.log("Requête multipart reçue.");
     }
 
-    //file upload
-    if (req.file) {
-      const pdfData = req.body;
-      console.log("Données reçues : ", pdfData);
+    const pdfData = req.body;
+    console.log("Données reçues : ", pdfData);
 
-      picturePath = req.file.path;
-      console.log(picturePath);
+    //ExistingPdf
+    const existingPdf = await PdfModel.findOne({ email: pdfData.email });
 
-      //create data
-      if (pdfData && pdfData.personalInfos) {
-        upload(req, res, async (err) => {
-          if (err) {
-            console.error("Erreur lors de l'upload :", err);
-          }
-        });
-        await PdfModel.create(pdfData);
-
-        //file pdf
-        const pdfFileName = `${pdfData.personalInfos[0].prenom}-cv.pdf`;
-        const pdfPath = path.join(
-          __dirname,
-          `../../client/public/uploads/pdf/${pdfFileName}`
-        );
-
-        if (req.file) {
-          await createInvoice(pdfData, req.file.path, pdfPath);
-          console.log("Une image a été incluse.");
-        } else {
-          await createInvoice(pdfData, null, pdfPath);
-          console.log("Aucune image incluse.");
-        }
-
-        console.log("PDF généré avec succès :", pdfPath);
-
-        return res
-          .status(201)
-          .json({ message: "PDF généré avec succès", pdfData });
-      } else {
-        console.error("Données reçues non valides : ", pdfData);
-        return res.status(400).json({ error: "Données reçues non valides" });
-      }
+    if (existingPdf) {
+      const updatedPdf = await PdfModel.findOneAndUpdate(
+        { email: pdfData.email },
+        pdfData,
+        { new: true }
+      );
+      console.log("Enregistrement existant mis à jour :", updatedPdf._id);
     } else {
-      const pdfData = req.body;
-      console.log("Données reçues : ", pdfData);
-
-      //create data
-      if (pdfData && pdfData.personalInfos) {
-        await PdfModel.create(pdfData);
-
-        //file pdf
-        const pdfFileName = `${pdfData.personalInfos[0].prenom}-cv.pdf`;
-        const pdfPath = path.join(
-          __dirname,
-          `../../client/public/uploads/pdf/${pdfFileName}`
-        );
-        let picturePath = null;
-
-        if (req.file) {
-          picturePath = req.file.path;
-          await createInvoice(pdfData, req.file.path, pdfPath);
-          console.log("Une image a été incluse.");
-        } else {
-          await createInvoice(pdfData, null, pdfPath);
-          console.log("Aucune image incluse.");
-        }
-
-        console.log("PDF généré avec succès :", pdfPath);
-
-        return res
-          .status(201)
-          .json({ message: "PDF généré avec succès", pdfData });
-      } else {
-        console.error("Données reçues non valides : ", pdfData);
-        return res.status(400).json({ error: "Données reçues non valides" });
-      }
+      await PdfModel.create(pdfData);
+      console.log(
+        "Aucun enregistrement existant avec cet e-mail n'a été trouvé."
+      );
     }
+
+    //Path
+    const pdfFileName = `${pdfData.personalInfos[0].prenom}-cv.pdf`;
+    const pdfPath = path.join(
+      __dirname,
+      `../../client/public/uploads/pdf/${pdfFileName}`
+    );
+
+    //File
+    if (req.file) {
+      picturePath = req.file.path;
+      await createInvoice(pdfData, req.file.path, pdfPath);
+      console.log("Une image a été incluse.");
+    } else {
+      await createInvoice(pdfData, null, pdfPath);
+      console.log("Aucune image incluse.");
+    }
+
+    console.log("PDF généré avec succès :", pdfPath);
+
+    return res.status(201).json({ message: "PDF généré avec succès", pdfData });
   } catch (error) {
     console.error(
       "Erreur lors de l'ajout ou de la mise à jour des données :",

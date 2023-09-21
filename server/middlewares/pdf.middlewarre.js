@@ -1,7 +1,7 @@
 const fs = require("fs");
 const PDFDocument = require("pdfkit");
 
-// Déplacement de la logique de création du PDF dans une fonction
+//Create PDF
 function createInvoice(pdfData, picturePath, pdfPath) {
   let doc = new PDFDocument({ size: "legal", margin: 20 });
   const lineWidth = 2;
@@ -24,11 +24,11 @@ function createInvoice(pdfData, picturePath, pdfPath) {
       heightRectangle
     )
     .fill();
-  // Définir la couleur de remplissage pour les titres en bleu
-  const blueFillColor = "#063970"; // Code hexadécimal de la couleur bleue
+
+  const blueFillColor = "#063970";
   doc.fillColor(blueFillColor);
 
-  const bluestrokeFillColor = "#063970"; // Code hexadécimal de la couleur bleue
+  const bluestrokeFillColor = "#063970";
   doc.strokeColor(bluestrokeFillColor);
 
   const whiteFillColor = "#FFFFFF";
@@ -172,7 +172,7 @@ function createInvoice(pdfData, picturePath, pdfPath) {
 
   doc
     .fontSize(12)
-    .fillColor(whiteFillColor) // Définir la couleur de remplissage en blanc
+    .fillColor(whiteFillColor)
     .text(pdfData.personalInfos[0].tel, 50, yPositionContact);
 
   // Ajoute l'adresse
@@ -185,7 +185,7 @@ function createInvoice(pdfData, picturePath, pdfPath) {
 
   doc
     .fontSize(12)
-    .fillColor(whiteFillColor) // Définir la couleur de remplissage en blanc
+    .fillColor(whiteFillColor)
     .text(pdfData.personalInfos[0].address, 50, yPositionContact);
 
   // Ajoute les réseaux sociaux
@@ -208,29 +208,6 @@ function createInvoice(pdfData, picturePath, pdfPath) {
           .font("Helvetica")
           .fontSize(12)
           .fillColor(whiteFillColor) // Définir la couleur de remplissage en blanc
-          .text(`${network.value}`, 50, yPositionContact);
-      }
-    });
-  }
-
-  // Ajoute les réseaux sociaux
-  yPositionContact += 10;
-  if (
-    pdfData.socialnetwork &&
-    Array.isArray(pdfData.socialnetwork) &&
-    pdfData.socialnetwork.length > 0
-  ) {
-    pdfData.socialnetwork.forEach((network) => {
-      if (network.value) {
-        yPositionContact += 17;
-        const socialIconPath = __dirname + `/images/${network.network}.png`;
-        doc.image(socialIconPath, 30, yPositionContact, {
-          height: 13,
-        });
-        yPositionContact += 1.7;
-        doc
-          .font("Helvetica")
-          .fontSize(12)
           .text(`${network.value}`, 50, yPositionContact);
       }
     });
@@ -314,7 +291,7 @@ function createInvoice(pdfData, picturePath, pdfPath) {
     .fontSize(18)
     .text("Études", xPositionEtudes, yPositionEtudes);
 
-  // Ligne sous le titre des études
+  // Ligne
   doc.lineWidth(lineWidth);
   doc
     .moveTo(xPositionEtudes, yPositionEtudes + 20)
@@ -338,13 +315,11 @@ function createInvoice(pdfData, picturePath, pdfPath) {
           education.diplome.charAt(0).toUpperCase() +
           education.diplome.slice(1);
 
-        // Mettre en gras et capitaliser le diplôme
         doc
           .fontSize(14)
           .font("Helvetica-Bold")
           .text(`${diplomeCapitalized}`, xPositionEtudes + 90, yPositionEtudes);
 
-        // Mettre en majuscules la première lettre du lieu
         const lieuCapitalized =
           education.lieu.charAt(0).toUpperCase() + education.lieu.slice(1);
 
@@ -370,7 +345,7 @@ function createInvoice(pdfData, picturePath, pdfPath) {
     .fontSize(18)
     .text("Compétences", xPositionCompetences, yPositionCompetences);
 
-  // Ligne sous le titre des compétences
+  // Ligne
   doc.lineWidth(lineWidth);
   doc
     .moveTo(xPositionCompetences, yPositionCompetences + 20)
@@ -404,7 +379,7 @@ function createInvoice(pdfData, picturePath, pdfPath) {
 
   doc.fontSize(18).text("Hobbies", xPositionHobbies, yPositionHobbies);
 
-  // Ligne sous le titre des hobbies
+  // Ligne
   doc.lineWidth(lineWidth);
   doc
     .moveTo(xPositionHobbies, yPositionHobbies + 20)
@@ -442,14 +417,29 @@ function createInvoice(pdfData, picturePath, pdfPath) {
   //cercle
   doc.circle(circleX, circleY, circleRadius).lineWidth(2).stroke();
 
-  // Chargez l'image à l'intérieur du cercle
+  //image
   if (fs.existsSync(picturePath)) {
     doc.save();
     doc.circle(circleX, circleY, circleRadius - padding).clip();
     doc.rotate(90, { origin: [circleX, circleY] });
-    doc.image(picturePath, imageX, imageY, {
-      width: imageWidth,
-      height: imageHeight,
+
+    const img = doc.openImage(picturePath);
+    const imgWidth = img.width;
+    const imgHeight = img.height;
+
+    //cover
+    const scaleFactor = Math.max(
+      imageWidth / imgWidth,
+      imageHeight / imgHeight
+    );
+    const newWidth = imgWidth * scaleFactor;
+    const newHeight = imgHeight * scaleFactor;
+    const offsetX = (imageWidth - newWidth) / 2 + imageX;
+    const offsetY = (imageHeight - newHeight) / 2 + imageY;
+
+    doc.image(picturePath, offsetX, offsetY, {
+      width: newWidth,
+      height: newHeight,
     });
     doc.restore();
   }

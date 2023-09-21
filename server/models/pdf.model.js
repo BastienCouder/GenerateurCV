@@ -6,25 +6,33 @@ const pdfSchema = mongoose.Schema(
       {
         prenom: {
           type: String,
+          required: true,
         },
         nom: {
           type: String,
+          required: true,
         },
         status: {
           type: String,
+          required: true,
         },
         email: {
           type: String,
+          unique: true,
+          required: true,
         },
         tel: {
           type: String,
+          required: true,
         },
         avatar: { type: String },
         address: {
           type: String,
+          required: true,
         },
         profil: {
           type: String,
+          required: true,
         },
       },
     ],

@@ -24,7 +24,7 @@ const upload = multer({
   storage: storageEngine,
   fileFilter,
   limits: {
-    fileSize: 1024 * 1024 * 10, // 10 Mo
+    fileSize: 1024 * 1024 * 5, // 5 Mo
   },
 }).single("personalInfos[0][avatar]");
 

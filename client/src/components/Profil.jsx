@@ -97,7 +97,7 @@ const PersonalInfo = ({
         <FormInputField
           id="email"
           value={personalInfo.email}
-          type="text"
+          type="email"
           name="email"
           onChange={(e) => updatePersonalInfoField("email", e.target.value)}
           placeholder="Email"
@@ -135,9 +135,9 @@ const PersonalInfo = ({
         <button
           type="button"
           onClick={() => handleResetImage()}
-          className="w-28 bg-red-500 hover:bg-red-600 text-white text-sm px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
+          className="w-24 text-white text-sm hover:bg-red-700 bg-red-500 rounded-lg py-1.5 px-2.5 mt-2"
         >
-          Réinitialiser
+          Supprimer
         </button>
       </div>
       <div className="mb-4">
