@@ -1,5 +1,5 @@
 # Generateur de CV
-Ce projet est un clone d'Instagram qui permet aux utilisateurs de partager des photos et de les commenter ou de les liker.
+Ce projet est un générateur de CV qui permet aux utilisateurs créer leur CV facilement.
 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/for-you.svg)](https://forthebadge.com)
