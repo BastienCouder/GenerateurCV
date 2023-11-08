@@ -6,7 +6,7 @@ Ce projet est un clone d'Instagram qui permet aux utilisateurs de partager des p
 
 ## Fonctionnalités
 
-Création d'un CV personnelle
+-Création d'un CV personnelle
 
 ### Pré-requis
 
