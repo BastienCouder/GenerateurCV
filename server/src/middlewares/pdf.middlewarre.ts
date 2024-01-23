@@ -1,8 +1,14 @@
+import { IPdf } from "@/models/pdf.model";
+
 const fs = require("fs");
 const PDFDocument = require("pdfkit");
 
 //Create PDF
-function createInvoice(pdfData, picturePath, pdfPath) {
+function createInvoice(
+  pdfData: IPdf,
+  picturePath: string | null,
+  pdfPath: string
+): void {
   let doc = new PDFDocument({ size: "legal", margin: 20 });
   const lineWidth = 2;
 
@@ -34,8 +40,8 @@ function createInvoice(pdfData, picturePath, pdfPath) {
   const whiteFillColor = "#FFFFFF";
 
   // Nom et prénom
-  const nom = pdfData.personalInfos[0].nom;
-  const prenom = pdfData.personalInfos[0].prenom;
+  const nom = pdfData.nom;
+  const prenom = pdfData.prenom;
 
   const nomCapitalized = nom.toUpperCase();
   const prenomCapitalized = prenom.toUpperCase();
@@ -48,13 +54,10 @@ function createInvoice(pdfData, picturePath, pdfPath) {
     });
 
   const maxWidthForstatusText = 300;
-  doc
-    .font("Helvetica")
-    .fontSize(14)
-    .text(pdfData.personalInfos[0].status, 260, 90, {
-      align: "center",
-      width: maxWidthForstatusText,
-    });
+  doc.font("Helvetica").fontSize(14).text(pdfData.status, 260, 90, {
+    align: "center",
+    width: maxWidthForstatusText,
+  });
 
   // Profil
   let yPositionProfil = 260;
@@ -80,15 +83,10 @@ function createInvoice(pdfData, picturePath, pdfPath) {
     .font("Helvetica")
     .fontSize(12)
     .fillColor(whiteFillColor)
-    .text(
-      pdfData.personalInfos[0].profil,
-      xPositionProfil,
-      (yPositionProfil += 10),
-      {
-        width: maxWidthForProfilText,
-        align: "justify",
-      }
-    );
+    .text(pdfData.profil, xPositionProfil, (yPositionProfil += 10), {
+      width: maxWidthForProfilText,
+      align: "justify",
+    });
 
   // Langues
   let yPositionLangues = 550;
@@ -162,7 +160,7 @@ function createInvoice(pdfData, picturePath, pdfPath) {
   doc
     .fontSize(12)
     .fillColor(whiteFillColor)
-    .text(pdfData.personalInfos[0].email, 50, yPositionContact);
+    .text(pdfData.email, 50, yPositionContact);
   yPositionContact += 17;
   const svgTelFilePath = __dirname + "/images/phone.png";
   doc.image(svgTelFilePath, 30, yPositionContact, {
@@ -173,7 +171,7 @@ function createInvoice(pdfData, picturePath, pdfPath) {
   doc
     .fontSize(12)
     .fillColor(whiteFillColor)
-    .text(pdfData.personalInfos[0].tel, 50, yPositionContact);
+    .text(pdfData.tel, 50, yPositionContact);
 
   // Ajoute l'adresse
   yPositionContact += 17;
@@ -186,7 +184,7 @@ function createInvoice(pdfData, picturePath, pdfPath) {
   doc
     .fontSize(12)
     .fillColor(whiteFillColor)
-    .text(pdfData.personalInfos[0].address, 50, yPositionContact);
+    .text(pdfData.adresse, 50, yPositionContact);
 
   // Ajoute les réseaux sociaux
   yPositionContact += 10;

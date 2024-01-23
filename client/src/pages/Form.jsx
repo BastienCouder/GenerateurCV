@@ -25,11 +25,11 @@ const Form = () => {
         profil: "",
       },
     ],
-    educations: [{ diplome: "", date: "", lieu: "" }],
-    experiences: [{ date: "", lieu: "", description: "" }],
-    competences: [""],
-    languages: [{ language: "", level: "" }],
-    hobbies: [""],
+    educations: [],
+    experiences: [],
+    competences: [],
+    languages: [],
+    hobbies: [],
     socialnetwork: [
       { network: "linkedin", value: "" },
       { network: "instagram", value: "" },
@@ -63,7 +63,7 @@ const Form = () => {
   };
 
   const handleAjouterEducation = () => {
-    const nouvelleEducation = { diplome: "", annee: "" };
+    const nouvelleEducation = { diplome: "", date: "", lieu: "" };
     setFormData({
       ...formData,
       educations: [...formData.educations, nouvelleEducation],
@@ -174,14 +174,13 @@ const Form = () => {
       fileInput.value = ""; // Définissez la valeur du champ input sur une chaîne vide
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const formDataToSend = new FormData();
 
-      formDataToSend.append("avatar", formData.avatar || "");
+      // Ajoutez chaque champ au FormData
       const personalInfo = formData.personalInfos[0];
       formDataToSend.append(
         "personalInfos[0][avatar]",
@@ -210,37 +209,61 @@ const Form = () => {
         personalInfo.profil || ""
       );
 
-      const education = formData.educations;
-      formDataToSend.append("educations[0][diplome]", education.diplome || "");
-      formDataToSend.append("educations[0][date]", education.date || "");
-      formDataToSend.append("educations[0][lieu]", education.lieu || "");
-
-      const experience = formData.experiences;
-      formDataToSend.append("experiences[0][date]", experience.date || "");
-      formDataToSend.append("experiences[0][lieu]", experience.lieu || "");
-      formDataToSend.append(
-        "experiences[0][description]",
-        experience.description || ""
-      );
-
-      for (let i = 0; i < formData.competences.length; i++) {
-        formDataToSend.append("competences[]", formData.competences[i] || "");
-      }
-
-      for (let i = 0; i < formData.languages.length; i++) {
+      formData.educations.forEach((education, index) => {
         formDataToSend.append(
-          "languages[][language]",
-          formData.languages[i].language || ""
+          `educations[${index}][diplome]`,
+          education.diplome || ""
         );
         formDataToSend.append(
-          "languages[][level]",
-          formData.languages[i].level || ""
+          `educations[${index}][date]`,
+          education.date || ""
         );
-      }
+        formDataToSend.append(
+          `educations[${index}][lieu]`,
+          education.lieu || ""
+        );
+      });
 
-      for (let i = 0; i < formData.hobbies.length; i++) {
-        formDataToSend.append("hobbies[]", formData.hobbies[i] || "");
-      }
+      formData.experiences.forEach((experience, index) => {
+        formDataToSend.append(
+          `experiences[${index}][date]`,
+          experience.date || ""
+        );
+        formDataToSend.append(
+          `experiences[${index}][lieu]`,
+          experience.lieu || ""
+        );
+        formDataToSend.append(
+          `experiences[${index}][description]`,
+          experience.description || ""
+        );
+      });
+
+      formData.competences.forEach((competence) => {
+        formDataToSend.append("competences[]", competence || "");
+      });
+
+      formData.languages.forEach((language, index) => {
+        formDataToSend.append(
+          `languages[${index}][language]`,
+          language.language || ""
+        );
+        formDataToSend.append(
+          `languages[${index}][level]`,
+          language.level || ""
+        );
+      });
+
+      formData.hobbies.forEach((hobbie) => {
+        formDataToSend.append("hobbies[]", hobbie || "");
+      });
+
+      formData.socialnetwork.forEach((network) => {
+        formDataToSend.append(
+          `socialnetwork[${network.network}]`,
+          network.value || ""
+        );
+      });
 
       const response = await axios.post(`${apiUrl}/pdf`, formDataToSend, {
         headers: {
@@ -261,6 +284,7 @@ const Form = () => {
     } catch (error) {
       console.error("Erreur lors de la génération du PDF.", error);
     }
+    console.log(formData);
   };
 
   return (
