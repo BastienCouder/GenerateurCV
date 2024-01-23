@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-interface IPdf extends Document {
+interface PdfDataType extends Document {
   prenom: string;
   nom: string;
   status: string;
@@ -82,5 +82,5 @@ const pdfSchema = new mongoose.Schema(
 );
 
 export default mongoose.model("Pdf", pdfSchema);
-const Pdf = mongoose.model<IPdf>("Pdf", pdfSchema);
-export { Pdf, IPdf };
+const Pdf = mongoose.model<PdfDataType>("Pdf", pdfSchema);
+export { Pdf, PdfDataType };

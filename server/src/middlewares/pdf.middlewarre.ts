@@ -1,14 +1,14 @@
-import { IPdf } from "@/models/pdf.model";
+import { PdfDataType } from "@/models/pdf.model";
 
 const fs = require("fs");
 const PDFDocument = require("pdfkit");
 
 //Create PDF
-function createInvoice(
-  pdfData: IPdf,
-  picturePath: string | null,
+export function createInvoice(
+  pdfData: PdfDataType,
+  picturePath: Buffer | null,
   pdfPath: string
-): void {
+) {
   let doc = new PDFDocument({ size: "legal", margin: 20 });
   const lineWidth = 2;
 
@@ -444,7 +444,3 @@ function createInvoice(
 
   doc.end();
 }
-
-module.exports = {
-  createInvoice,
-};
