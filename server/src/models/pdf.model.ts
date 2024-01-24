@@ -56,7 +56,7 @@ const pdfSchema = new mongoose.Schema(
     ],
     experiences: [
       {
-        date: Date,
+        date: String,
         lieu: String,
         description: String,
       },
@@ -71,8 +71,10 @@ const pdfSchema = new mongoose.Schema(
     hobbies: [String],
     socialnetwork: [
       {
-        network: String,
-        value: String,
+        linkedin: String,
+        github: String,
+        instagram: String,
+        website: String,
       },
     ],
   },

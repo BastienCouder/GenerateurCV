@@ -1,8 +1,7 @@
 import express from "express";
-import { pdfController } from "@/controllers/pdfController";
-
-// Utilisez express.Router
+import { pdfController } from "../controllers/pdfController";
 const router = express.Router();
+// Utilisez express.Router
 
 // pdf routes
 router.get("/", pdfController.readPdf);

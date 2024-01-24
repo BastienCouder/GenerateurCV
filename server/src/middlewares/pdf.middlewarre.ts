@@ -1,4 +1,4 @@
-import { PdfDataType } from "@/models/pdf.model";
+import { PdfDataType } from "../models/pdf.model";
 
 const fs = require("fs");
 const PDFDocument = require("pdfkit");
