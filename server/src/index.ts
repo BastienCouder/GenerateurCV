@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
 import bodyParser from "body-parser";
 import http from "http";
 import cors from "cors";
