@@ -20,16 +20,15 @@ Client :
 Executez les commande: ``cd client`` ``npm i`` ``npm run dev``
 
 Serveur :
-Executez les commande: ``cd server`` ``npm i`` ``npm run server``
+Executez les commande: ``cd server`` ``npm i`` ``npm run dev``
 
 
 ## Fabriqué avec
 
 * [tailwind.css](tailwindcss.com) - Framework CSS (front-end)
 * [ReactJs](https://fr.legacy.reactjs.org/)  - Librairie Javascript (front-end)
-* [vite](https://vitejs.dev/)  - serveur de développement (front-end)
+* [typescript](https://www.typescriptlang.org/) - Langage
 * [Nodejs](https://nodejs.org/en/docs) - Langage Javascript (back-end)
-* [MongoDB](https://www.mongodb.com/fr-fr) - Base de données (NoSQL)
 
 ## Auteurs
 Listez le(s) auteur(s) du projet ici !
