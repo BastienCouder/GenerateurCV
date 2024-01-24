@@ -4,7 +4,6 @@ const router = express.Router();
 // Utilisez express.Router
 
 // pdf routes
-router.get("/", pdfController.readPdf);
 router.post("/", pdfController.createPdf);
 
 // Exportez le routeur en utilisant la syntaxe ES6

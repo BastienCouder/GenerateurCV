@@ -1,4 +1,3 @@
-import React from "react";
 import {
   FormField,
   FormItem,
@@ -38,7 +37,7 @@ export default function ExperiencesInfos({
 
   const renderExperienceFields = () => {
     return experienceFields.map((field: any, index: number) => (
-      <div key={field.id} className="flex gap-x-4">
+      <div key={field.id} className="flex gap-x-4 items-end">
         {experienceFields.length > 1 && (
           <div
             onClick={() => removeExperienceField(field.index)}

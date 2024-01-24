@@ -34,7 +34,7 @@ export default function HobbiesInfos({
 
   const renderHobbies = () => {
     return hobbiesFields.map((field: any, index: number) => (
-      <div key={field.id} className="flex gap-x-4">
+      <div key={field.id} className="flex gap-x-4 items-end">
         {hobbiesFields.length > 1 && (
           <div
             onClick={() => removeHobbyField(field.index)}

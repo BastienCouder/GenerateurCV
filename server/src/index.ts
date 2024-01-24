@@ -1,15 +1,11 @@
 import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
 import http from "http";
-import { connectDB } from "./config/db";
 import cors from "cors";
 import dotenv from "dotenv";
 import pdfRoutes from "./routes/pdf.routes"; // Assurez-vous que le chemin est correct
 
 dotenv.config();
-
-// Connexion à la DB
-connectDB();
 
 const app: Express = express();
 const server = http.createServer(app);

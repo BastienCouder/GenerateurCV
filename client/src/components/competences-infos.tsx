@@ -37,7 +37,7 @@ export default function CompetencesInfos({
 
   const renderCompetences = () => {
     return competenceFields.map((field: any, index: number) => (
-      <div key={field.id} className="flex gap-x-4 items-center">
+      <div key={field.id} className="flex gap-x-4  items-end">
         {competenceFields.length > 1 && (
           <div
             onClick={() => removeCompetenceField(field.id)}

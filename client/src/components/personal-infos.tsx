@@ -14,8 +14,8 @@ interface PersonalInfosProps {
 export default function PersonalInfos({ form }: PersonalInfosProps) {
   return (
     <>
-      <section className="flex gap-x-8">
-        <div className="w-1/2 space-y-4">
+      <section className="flex flex-col lg:flex-row gap-x-8 gap-y-4">
+        <div className="lg:w-1/2 xl:w-1/3 space-y-4">
           <FormField
             control={form.control}
             name="prenom"
@@ -39,6 +39,19 @@ export default function PersonalInfos({ form }: PersonalInfosProps) {
                   <Input {...field} />
                 </FormControl>
 
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Status</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -83,7 +96,7 @@ export default function PersonalInfos({ form }: PersonalInfosProps) {
             )}
           />
         </div>
-        <div className="w-1/2">
+        <div className="lg:w-1/2">
           <FormField
             control={form.control}
             name="profil"

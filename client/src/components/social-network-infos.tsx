@@ -22,15 +22,15 @@ export default function SocialNetworksInfos({
   form,
 }: SocialNetworksInfosProps) {
   return (
-    <div className="space-y-4">
-      {initialSocialNetworks.map((networkField, index) => (
+    <div className="space-y-4 lg:w-1/2 xl:w-1/3">
+      {initialSocialNetworks.map((networkField) => (
         <FormField
           key={networkField.network}
           control={form.control}
           name={`socialnetworks.${networkField.network.toLowerCase()}`}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{networkField.network}</FormLabel>
+              <FormLabel>{networkField.network} (optionel)</FormLabel>
               <FormControl>
                 <Input
                   placeholder={`Entre ton ${networkField.network}`}

@@ -37,11 +37,18 @@ const languageSchema = z.object({
 });
 
 const socialnetworkSchema = z.object({
-  linkedin: z.string({ required_error: messageChampRequis }).optional(),
-  github: z.string({ required_error: messageChampRequis }).optional(),
-  instagram: z.string({ required_error: messageChampRequis }).optional(),
-  website: z.string({ required_error: messageChampRequis }).optional(),
+  linkedin: z.string().optional(),
+  github: z.string().optional(),
+  instagram: z.string().optional(),
+  website: z.string().optional(),
 });
+
+const competencesSchema = z.array(
+  z.string().nonempty({ message: "La compétence ne peut pas être vide" })
+);
+const hobbiesSchema = z.array(
+  z.string().nonempty({ message: "Le loisir ne peut pas être vide" })
+);
 
 export const pdfDataSchema = z.object({
   prenom: z
@@ -69,20 +76,8 @@ export const pdfDataSchema = z.object({
     .nonempty({ message: messageChampRequis }),
   educations: z.array(educationSchema).min(1, { message: messageMinRequis }),
   experiences: z.array(experienceSchema).min(1, { message: messageMinRequis }),
-  competences: z
-    .array(
-      z
-        .string({ required_error: messageChampRequis })
-        .nonempty({ message: messageChampRequis })
-    )
-    .min(1, { message: messageMinRequis }),
   languages: z.array(languageSchema),
-  hobbies: z
-    .array(
-      z
-        .string({ required_error: messageChampRequis })
-        .nonempty({ message: messageChampRequis })
-    )
-    .min(1, { message: messageMinRequis }),
-  socialnetwork: z.array(socialnetworkSchema),
+  competences: competencesSchema.min(1, { message: messageMinRequis }),
+  hobbies: hobbiesSchema.min(1, { message: messageMinRequis }),
+  socialnetwork: z.array(socialnetworkSchema).optional(),
 });

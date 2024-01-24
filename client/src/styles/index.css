@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 @layer base {
   :root {
@@ -76,7 +76,9 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
   }
 
   h1 {
@@ -88,7 +90,7 @@
   }
 
   ::-webkit-scrollbar {
-    @apply w-[5px];
+    @apply hidden lg:flex w-[5px];
   }
 
   ::-webkit-scrollbar-track {

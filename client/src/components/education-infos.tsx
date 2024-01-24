@@ -35,7 +35,7 @@ export default function EducationsInfos({
   };
   const renderEducationFields = () => {
     return educationFields.map((field: any, index: number) => (
-      <div key={field.id} className="flex gap-x-4">
+      <div key={field.id} className="flex gap-x-4  items-end">
         {educationFields.length > 1 && (
           <div
             onClick={() => removeExperienceField(field.index)}

@@ -1,18 +1,17 @@
-import { PdfDataType } from "../models/pdf.model";
+import { PdfDataType } from "../types";
+import sizeOf from "image-size";
 
-const fs = require("fs");
-const PDFDocument = require("pdfkit");
+import PDFDocument from "pdfkit";
 
 //Create PDF
 export function createInvoice(
   pdfData: PdfDataType,
-  picturePath: Buffer | null,
-  pdfPath: string
+  pictureBuffer: Buffer | null,
+  res: any
 ) {
   let doc = new PDFDocument({ size: "legal", margin: 20 });
+  doc.pipe(res);
   const lineWidth = 2;
-
-  doc.pipe(fs.createWriteStream(pdfPath));
 
   const widthRectangle = 240;
   const heightRectangle = 1008;
@@ -416,29 +415,37 @@ export function createInvoice(
   doc.circle(circleX, circleY, circleRadius).lineWidth(2).stroke();
 
   //image
-  if (fs.existsSync(picturePath)) {
+  if (pictureBuffer) {
     doc.save();
     doc.circle(circleX, circleY, circleRadius - padding).clip();
-    doc.rotate(90, { origin: [circleX, circleY] });
 
-    const img = doc.openImage(picturePath);
-    const imgWidth = img.width;
-    const imgHeight = img.height;
+    // Obtention des dimensions de l'image à partir du buffer
+    const dimensions = sizeOf(pictureBuffer);
 
-    //cover
-    const scaleFactor = Math.max(
-      imageWidth / imgWidth,
-      imageHeight / imgHeight
-    );
-    const newWidth = imgWidth * scaleFactor;
-    const newHeight = imgHeight * scaleFactor;
-    const offsetX = (imageWidth - newWidth) / 2 + imageX;
-    const offsetY = (imageHeight - newHeight) / 2 + imageY;
+    if (dimensions.width && dimensions.height) {
+      const imgWidth = dimensions.width;
+      const imgHeight = dimensions.height;
 
-    doc.image(picturePath, offsetX, offsetY, {
-      width: newWidth,
-      height: newHeight,
-    });
+      // Calcul pour centrer et ajuster l'image dans le cercle
+      const scaleFactor = Math.max(
+        imageWidth / imgWidth,
+        imageHeight / imgHeight
+      );
+      const newWidth = imgWidth * scaleFactor;
+      const newHeight = imgHeight * scaleFactor;
+      const offsetX = (imageWidth - newWidth) / 2 + imageX;
+      const offsetY = (imageHeight - newHeight) / 2 + imageY;
+
+      // Utiliser le buffer pour afficher l'image
+      doc.image(pictureBuffer, offsetX, offsetY, {
+        width: newWidth,
+        height: newHeight,
+      });
+    } else {
+      // Gérer le cas où les dimensions ne sont pas disponibles
+      console.error("Impossible de déterminer les dimensions de l'image.");
+    }
+
     doc.restore();
   }
 

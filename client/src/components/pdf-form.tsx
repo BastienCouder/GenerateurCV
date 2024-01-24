@@ -13,6 +13,7 @@ import LanguagesInfos from "./langages-infos";
 import HobbiesInfos from "./hobbies-infos";
 import CompetencesInfos from "./competences-infos";
 import SocialNetworksInfos from "./social-network-infos";
+import { Separator } from "./ui/separator";
 
 const PdfForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -24,7 +25,7 @@ const PdfForm = () => {
 
   const form = useForm<z.infer<typeof pdfDataSchema>>({
     resolver: zodResolver(pdfDataSchema),
-    mode: "onChange",
+    mode: "onSubmit",
     defaultValues: {},
   });
   const TotalSteps = 7;
@@ -58,19 +59,21 @@ const PdfForm = () => {
         }
         break;
       case 4:
+        for (let i = 0; i < competenceFields.length; i++) {
+          fieldsToValidate.push(`competences[${i}]`);
+        }
+        break;
+
+      case 5:
         for (let i = 0; i < languageFields.length; i++) {
           fieldsToValidate.push(`languages[${i}].language`);
           fieldsToValidate.push(`languages[${i}].level`);
         }
         break;
-      case 5:
+
+      case 6:
         for (let i = 0; i < hobbiesFields.length; i++) {
           fieldsToValidate.push(`hobbies[${i}]`);
-        }
-        break;
-      case 6:
-        for (let i = 0; i < competenceFields.length; i++) {
-          fieldsToValidate.push(`competences[${i}]`);
         }
         break;
       case 7:
@@ -85,8 +88,6 @@ const PdfForm = () => {
 
     if (isStepValid) {
       setCurrentStep(currentStep + 1);
-    } else {
-      console.error("Champs non valides");
     }
   };
 
@@ -96,10 +97,43 @@ const PdfForm = () => {
     }
   };
 
-  function onSubmit(values: z.infer<typeof pdfDataSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof pdfDataSchema>) {
+    console.log("Tentative de soumission du formulaire", values);
+
+    try {
+      const response = await fetch("http://localhost:5000/pdf", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+
+      // Gestion de la réponse en tant que blob
+      const blob = await response.blob();
+
+      // Création d'un URL pour le blob
+      const downloadUrl = window.URL.createObjectURL(blob);
+
+      // Création d'un élément 'a' pour le téléchargement
+      const a = document.createElement("a");
+      a.href = downloadUrl;
+      a.download = `${values.prenom}-${values.nom}-CV.pdf`; // Nom du fichier PDF
+      document.body.appendChild(a);
+      a.click();
+
+      // Nettoyage
+      window.URL.revokeObjectURL(downloadUrl);
+      a.remove();
+
+      console.log("Données envoyées avec succès et fichier PDF téléchargé.");
+    } catch (error) {
+      console.error("Erreur lors de l'envoi des données:", error);
+    }
   }
 
   return (
@@ -111,12 +145,14 @@ const PdfForm = () => {
         {currentStep === 1 && (
           <>
             <h2>Informations personnelles</h2>
+            <Separator />
             <PersonalInfos form={form} />
           </>
         )}
         {currentStep === 2 && (
           <>
             <h2>Parcours et formations</h2>
+            <Separator />
             <EducationsInfos
               form={form}
               educationFields={educationFields}
@@ -127,6 +163,7 @@ const PdfForm = () => {
         {currentStep === 3 && (
           <>
             <h2>Expériences professionelles</h2>
+            <Separator />
             <ExperiencesInfos
               form={form}
               experienceFields={experienceFields}
@@ -137,6 +174,7 @@ const PdfForm = () => {
         {currentStep === 4 && (
           <>
             <h2>Compétences</h2>
+            <Separator />
             <CompetencesInfos
               form={form}
               competenceFields={competenceFields}
@@ -147,6 +185,7 @@ const PdfForm = () => {
         {currentStep === 5 && (
           <>
             <h2>Langues</h2>
+            <Separator />
             <LanguagesInfos
               form={form}
               languageFields={languageFields}
@@ -157,6 +196,7 @@ const PdfForm = () => {
         {currentStep === 6 && (
           <>
             <h2>Loisirs</h2>
+            <Separator />
             <HobbiesInfos
               form={form}
               hobbiesFields={hobbiesFields}
@@ -164,7 +204,13 @@ const PdfForm = () => {
             />
           </>
         )}
-        {currentStep === 7 && <SocialNetworksInfos form={form} />}
+        {currentStep === 7 && (
+          <>
+            <h2>Réseaux sociaux</h2>
+            <Separator />
+            <SocialNetworksInfos form={form} />{" "}
+          </>
+        )}
         <div className="space-x-4">
           {currentStep > 1 && (
             <Button type="button" onClick={handlePreviousStep}>

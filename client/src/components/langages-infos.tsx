@@ -37,7 +37,7 @@ export default function LanguagesInfos({
 
   const renderLanguageFields = () => {
     return languageFields.map((field: any, index: number) => (
-      <div key={field.id} className="flex gap-x-4">
+      <div key={field.id} className="flex gap-x-4  items-end">
         {languageFields.length > 1 && (
           <div
             onClick={() => removeLanguageField(field.index)}
