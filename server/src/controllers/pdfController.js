@@ -1,15 +1,10 @@
 import { createInvoice } from "../middlewares/pdf.middlewarre";
 import path from "path";
 import multer from "multer";
-import { Request, Response, NextFunction } from "express";
 
 // Configuration de multer pour l'upload de fichier
 const storageEngine = multer.memoryStorage();
-const fileFilter = (
-  req: Request,
-  file: Express.Multer.File,
-  cb: multer.FileFilterCallback
-) => {
+const fileFilter = () => {
   const pattern = /jpg|jpeg/;
   if (pattern.test(path.extname(file.originalname).toLowerCase())) {
     cb(null, true);
@@ -27,7 +22,7 @@ const upload = multer({
 // Création d'un PDF
 export const createPdf = [
   upload,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req, res, next) => {
     try {
       const pdfData = req.body;
       const imageBuffer = req.file ? req.file.buffer : null;

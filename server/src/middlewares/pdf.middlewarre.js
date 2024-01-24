@@ -1,14 +1,9 @@
-import { PdfDataType } from "../types";
 import sizeOf from "image-size";
 
 import PDFDocument from "pdfkit";
 
 //Create PDF
-export function createInvoice(
-  pdfData: PdfDataType,
-  pictureBuffer: Buffer | null,
-  res: any
-) {
+export function createInvoice(pdfData, pictureBuffer, res) {
   let doc = new PDFDocument({ size: "legal", margin: 20 });
   doc.pipe(res);
   const lineWidth = 2;
@@ -450,4 +445,16 @@ export function createInvoice(
   }
 
   doc.end();
+
+  bufferStream.on("finish", () => {
+    // Définir les en-têtes pour le téléchargement du PDF
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${pdfData.prenom}-cv.pdf"`
+    );
+
+    // Envoyer le contenu du flux en mémoire comme réponse
+    bufferStream.pipe(res);
+  });
 }

@@ -1,4 +1,4 @@
-import express, { Express } from "express";
+import express from "express";
 import bodyParser from "body-parser";
 import http from "http";
 import cors from "cors";
@@ -7,7 +7,7 @@ import pdfRoutes from "./routes/pdf.routes"; // Assurez-vous que le chemin est c
 
 dotenv.config();
 
-const app: Express = express();
+const app = express();
 const server = http.createServer(app);
 
 // Middleware
@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.text({ type: "/" }));
 
 // Définir les options de CORS
-const clientUrl = process.env.CLIENT_URL || "http://localhost:3000"; // Valeur par défaut si CLIENT_URL n'est pas défini
+const clientUrl = process.env.CLIENT_URL; // Valeur par défaut si CLIENT_URL n'est pas défini
 const corsOptions = {
   origin: [clientUrl], // Utilisation de clientUrl
   credentials: true,
