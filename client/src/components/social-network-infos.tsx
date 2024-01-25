@@ -30,7 +30,7 @@ export default function SocialNetworksInfos({
           name={`socialnetworks.${networkField.network.toLowerCase()}`}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{networkField.network} (optionel)</FormLabel>
+              <FormLabel>{networkField.network} (optionnel)</FormLabel>
               <FormControl>
                 <Input
                   placeholder={`Entre ton ${networkField.network}`}
