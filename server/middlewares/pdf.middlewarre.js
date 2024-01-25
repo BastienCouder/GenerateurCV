@@ -1,7 +1,13 @@
 import sizeOf from "image-size";
-
 import PDFDocument from "pdfkit";
+import path from "path";
+import { fileURLToPath } from "url";
+import stream from "stream";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const bufferStream = new stream.PassThrough();
 //Create PDF
 export function createInvoice(pdfData, pictureBuffer, res) {
   let doc = new PDFDocument({ size: "legal", margin: 20 });
