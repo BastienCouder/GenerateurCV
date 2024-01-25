@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import http from "http";
 import cors from "cors";
 import dotenv from "dotenv";
-import pdfRoutes from "./routes/pdf.routes"; // Assurez-vous que le chemin est correct
+import pdfRoutes from "./routes/pdf.routes.js"; // Assurez-vous que le chemin est correct
 
 dotenv.config();
 

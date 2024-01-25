@@ -1,4 +1,4 @@
-import { createInvoice } from "../middlewares/pdf.middlewarre";
+import { createInvoice } from "../middlewares/pdf.middlewarre.js";
 import path from "path";
 import multer from "multer";
 
