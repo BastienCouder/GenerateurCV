@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon index.js",
+    "server": "nodemon index.js",
     "buildtest": "npm i && nodemon index.js",
     "build": "npm i"
   },
