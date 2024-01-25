@@ -2,11 +2,11 @@
   "name": "server",
   "version": "1.0.0",
   "description": "<Votre description ici>",
-  "main": "src/index.js",
+  "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon .src/index.js",
-    "buildtest": "npm i && nodemon ./src/index.js",
+    "dev": "nodemon index.js",
+    "buildtest": "npm i && nodemon index.js",
     "build": "npm i"
   },
   "keywords": [],
